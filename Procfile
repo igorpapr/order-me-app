@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar backend/target/restaurant-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar orderme-backend/target/orderme-backend-0.0.1-SNAPSHOT.jar
