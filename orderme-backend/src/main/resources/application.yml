@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://ec2-63-34-97-163.eu-west-1.compute.amazonaws.com:5432/d6t9lfcbtfjva1
+    username: slnitserovcitl
+    password: b9fcef3ac13e0ea93db8c5b910c813f8b1a4714017c2d1d27aa6afbc3ea10058
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    path: /swagger.html
+
