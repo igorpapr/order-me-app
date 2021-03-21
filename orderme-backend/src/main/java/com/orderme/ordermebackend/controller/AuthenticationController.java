@@ -2,49 +2,45 @@ package com.orderme.ordermebackend.controller;
 
 import com.orderme.ordermebackend.controller.utils.PathRoutes;
 import com.orderme.ordermebackend.model.dto.security.AuthenticationRequest;
+import com.orderme.ordermebackend.model.dto.security.RegistrationRequest;
+import com.orderme.ordermebackend.model.entity.Role;
 import com.orderme.ordermebackend.model.entity.security.AuthenticationResponse;
-import com.orderme.ordermebackend.utils.security.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.MediaType;
+import com.orderme.ordermebackend.service.AuthenticationService;
+import com.orderme.ordermebackend.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(PathRoutes.PATH_AUTH)
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final UserService userService;
 
-    @Qualifier("userDetailsServiceImpl")
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final AuthenticationService authenticationService;
 
-    @GetMapping(value = "/admin", produces = MediaType.TEXT_PLAIN_VALUE)
-    @ResponseBody()
-    public String home() {
-        //TODO tbd
-        return "Hello";
+    public AuthenticationController(UserService userService,
+                                    AuthenticationService authenticationService) {
+        this.userService = userService;
+        this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/authenticate") //ОТРИМАТИ ТОКЕН, АЛЯ ЛОГІН
-    public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest credentials) throws Exception {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword()));
-        } catch (BadCredentialsException e) {
-            System.err.println("Error: ");
-            e.printStackTrace();
-            throw new Exception(e.getMessage());
-        }
-        UserDetails userDetails = userDetailsService.loadUserByUsername(credentials.getEmail());
-        String jwt = JwtUtils.generateJWTToken(userDetails);
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    @PostMapping(PathRoutes.CHILD_PATH_AUTH)
+    public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest credentials) {
+        AuthenticationResponse response =
+                new AuthenticationResponse(authenticationService.authenticateAndCreateJwt(credentials));
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(PathRoutes.CHILD_PATH_REGISTER)
+    public ResponseEntity<?> register(@RequestBody RegistrationRequest request) {
+        userService.registerWithRole(request, Role.USER);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping(PathRoutes.CHILD_PATH_ADMIN_REGISTER)
+    public ResponseEntity<?> registerAdmin(@RequestBody RegistrationRequest request) {
+        userService.registerWithRole(request, Role.ADMIN);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

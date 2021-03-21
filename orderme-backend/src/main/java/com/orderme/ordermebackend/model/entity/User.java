@@ -1,43 +1,74 @@
 package com.orderme.ordermebackend.model.entity;
 
+import lombok.Builder;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
+@Builder
 public class User {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.AUTO) //TODO ??????
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid",
-            strategy = "uuid")
-    @Column(name="user_id", updatable = false, nullable = false)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(unique = true, updatable = false, nullable = false)
     private UUID userId;
 
+    @Column(unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
     private String lastName;
+
+    @OneToMany(mappedBy = "createdBy")
+    private Set<Order> createdOrders;
+
+    @OneToMany(mappedBy = "processingBy")
+    private Set<Order> processingOrders;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public UUID getId() {
+    public User() {
+    }
+
+    public User(UUID userId,  String email, String password, String firstName, String lastName, Set<Order> createdOrders, Set<Order> processingOrders, Role role) {
+        this.userId = userId;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.createdOrders = createdOrders;
+        this.processingOrders = processingOrders;
+        this.role = role;
+    }
+
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setId(UUID id) {
-        this.userId = id;
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setUserName(String userName) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -49,6 +80,22 @@ public class User {
         this.password = password;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -56,4 +103,21 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public Set<Order> getCreatedOrders() {
+        return createdOrders;
+    }
+
+    public void setCreatedOrders(Set<Order> createdOrders) {
+        this.createdOrders = createdOrders;
+    }
+
+    public Set<Order> getProcessingOrders() {
+        return processingOrders;
+    }
+
+    public void setProcessingOrders(Set<Order> processingOrders) {
+        this.processingOrders = processingOrders;
+    }
+
 }

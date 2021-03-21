@@ -14,10 +14,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Component
 @Slf4j
@@ -29,8 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         try {
             String jwt = getJwtFromHeaders(request);
             String username = null;
@@ -39,6 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+                //TODO get user from token and create UsernamePasswordAuthenticationToken from the given jwt, don't forget to add the FACADE
                 if (JwtUtils.validateToken(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
