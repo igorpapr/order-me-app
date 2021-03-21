@@ -10,7 +10,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 @Builder
-public class User {
+public class User implements AbstractEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")

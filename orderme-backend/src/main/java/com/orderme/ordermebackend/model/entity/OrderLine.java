@@ -3,7 +3,7 @@ package com.orderme.ordermebackend.model.entity;
 import javax.persistence.*;
 
 @Entity(name = "order_lines")
-public class OrderLine {
+public class OrderLine implements AbstractEntity {
 
     @EmbeddedId
     private OrderLinesKey orderLineId;

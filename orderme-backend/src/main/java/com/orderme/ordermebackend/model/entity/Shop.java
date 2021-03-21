@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity(name = "shops")
-public class Shop {
+public class Shop implements AbstractEntity {
 
     @Id
     @GeneratedValue

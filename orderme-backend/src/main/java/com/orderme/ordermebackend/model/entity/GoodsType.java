@@ -1,39 +1,46 @@
 package com.orderme.ordermebackend.model.entity;
 
-import org.hibernate.annotations.GenericGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 
 import javax.persistence.*;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity(name = "goods_types")
-public class GoodsType {
+@JsonIgnoreProperties({"hibernateLazyInitializer"}) //https://question-it.com/questions/533939/ne-najden-serializator-dlja-klassa-orghibernateproxypojobytebuddybytebuddyinterceptor-i-ne-najdeny-svojstva-dlja-sozdanija-beanserializer
+@Builder
+public class GoodsType implements AbstractEntity<Integer> {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    @Column(unique = true, updatable = false, nullable = false)
-    private UUID goodsTypeId;
+    @GeneratedValue
+    @Column(nullable = false, updatable = false, unique = true)
+    private Integer goodsTypeId;
 
     @Column(nullable = false)
     private String title;
 
     private String description;
 
-    @OneToMany(mappedBy = "goodsType")
+    @JsonIgnore
+    @OneToMany(mappedBy = "goodsType", cascade = CascadeType.ALL)
     private Set<Goods> goods;
 
     public GoodsType() {
     }
 
-    public UUID getGoodsTypeId() {
+    public GoodsType(Integer goodsTypeId, String title, String description, Set<Goods> goods) {
+        this.goodsTypeId = goodsTypeId;
+        this.title = title;
+        this.description = description;
+        this.goods = goods;
+    }
+
+    public Integer getGoodsTypeId() {
         return goodsTypeId;
     }
 
-    public void setGoodsTypeId(UUID goodsTypeId) {
+    public void setGoodsTypeId(Integer goodsTypeId) {
         this.goodsTypeId = goodsTypeId;
     }
 
@@ -60,4 +67,5 @@ public class GoodsType {
     public void setGoods(Set<Goods> goods) {
         this.goods = goods;
     }
+
 }

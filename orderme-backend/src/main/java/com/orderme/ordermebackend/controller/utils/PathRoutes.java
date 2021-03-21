@@ -16,5 +16,6 @@ public class PathRoutes {
     public static final String CHILD_PATH_REGISTER = "/register";
     public static final String CHILD_PATH_ADMIN_REGISTER = "/register/admin";
     public static final String CHILD_PATH_AUTH = "/authenticate";
+    public static final String CHILD_PATH_GOODS_TYPE = "/goodsType";
 
 }

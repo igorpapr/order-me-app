@@ -1,20 +1,16 @@
 package com.orderme.ordermebackend.model.entity;
 
+import lombok.Builder;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
-public class Goods {
+@Builder
+public class Goods implements AbstractEntity<UUID> {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -31,7 +27,10 @@ public class Goods {
     private String description;
 
     @Column(precision = 10, scale = 2, nullable = false)
-    private BigDecimal price;
+    private BigDecimal oldPrice;
+
+    @Column(precision = 10, scale = 2, nullable = false)
+    private BigDecimal actualPrice;
 
     private String imageLink;
 
@@ -39,13 +38,25 @@ public class Goods {
     private Set<OrderLine> orderLines;
 
     @ManyToOne
-    @JoinColumn(name="goodsType", referencedColumnName = "goodsTypeId", insertable = false, nullable = false)
+    @JoinColumn(name = "goods_type", referencedColumnName = "goodsTypeId", nullable = false)
     private GoodsType goodsType;
 
     @OneToMany(mappedBy = "goods")
     private Set<GoodsAvailability> goodsAvailabilities;
 
     public Goods() {
+    }
+
+    public Goods(UUID goodsId, String title, String description, BigDecimal oldPrice, BigDecimal actualPrice, String imageLink, Set<OrderLine> orderLines, GoodsType goodsType, Set<GoodsAvailability> goodsAvailabilities) {
+        this.goodsId = goodsId;
+        this.title = title;
+        this.description = description;
+        this.oldPrice = oldPrice;
+        this.actualPrice = actualPrice;
+        this.imageLink = imageLink;
+        this.orderLines = orderLines;
+        this.goodsType = goodsType;
+        this.goodsAvailabilities = goodsAvailabilities;
     }
 
     public UUID getGoodsId() {
@@ -72,12 +83,20 @@ public class Goods {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getOldPrice() {
+        return oldPrice;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setOldPrice(BigDecimal oldPrice) {
+        this.oldPrice = oldPrice;
+    }
+
+    public BigDecimal getActualPrice() {
+        return actualPrice;
+    }
+
+    public void setActualPrice(BigDecimal actualPrice) {
+        this.actualPrice = actualPrice;
     }
 
     public String getImageLink() {
@@ -111,4 +130,5 @@ public class Goods {
     public void setGoodsAvailabilities(Set<GoodsAvailability> goodsAvailabilities) {
         this.goodsAvailabilities = goodsAvailabilities;
     }
+
 }

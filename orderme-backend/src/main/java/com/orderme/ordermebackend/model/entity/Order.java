@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "orders")
-public class Order {
+public class Order implements AbstractEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")

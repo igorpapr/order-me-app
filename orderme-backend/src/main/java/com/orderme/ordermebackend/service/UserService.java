@@ -10,8 +10,5 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 
     void registerWithRole(RegistrationRequest request, Role role);
-
-
     //disable user?????
-
 }
