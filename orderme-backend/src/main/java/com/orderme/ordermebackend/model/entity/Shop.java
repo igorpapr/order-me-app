@@ -1,33 +1,47 @@
 package com.orderme.ordermebackend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity(name = "shops")
-public class Shop implements AbstractEntity {
+@Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer"}) //https://question-it.com/questions/533939/ne-najden-serializator-dlja-klassa-orghibernateproxypojobytebuddybytebuddyinterceptor-i-ne-najdeny-svojstva-dlja-sozdanija-beanserializer
+public class Shop implements AbstractEntity<Integer> {
 
     @Id
     @GeneratedValue
     @Column(nullable = false, updatable = false, unique = true)
-    private int shopId;
+    private Integer shopId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String address;
 
     @Column(nullable = false)
     private String title;
 
     @OneToMany(mappedBy = "shop")
+    @JsonIgnore
     private Set<GoodsAvailability> goodsAvailabilities;
 
     public Shop() {
     }
 
-    public int getShopId() {
+    public Shop(Integer shopId, String address, String title, Set<GoodsAvailability> goodsAvailabilities) {
+        this.shopId = shopId;
+        this.address = address;
+        this.title = title;
+        this.goodsAvailabilities = goodsAvailabilities;
+    }
+
+    public Integer getShopId() {
         return shopId;
     }
 
-    public void setShopId(int shopId) {
+    public void setShopId(Integer shopId) {
         this.shopId = shopId;
     }
 

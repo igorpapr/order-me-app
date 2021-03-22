@@ -9,8 +9,12 @@ public class GoodsTypeValidationServiceImpl extends AbstractDtoValidationService
 
     @Override
     public void validateCreate(GoodsTypeDto dto) {
-        if (dto.getTitle() == null) {
-            failWithMissingParameter("title");
+        if (dto != null) {
+            if (dto.getTitle() == null) {
+                failWithMissingParameter("title");
+            }
+        } else {
+            failWithEmptyDto(GoodsTypeDto.class);
         }
     }
 

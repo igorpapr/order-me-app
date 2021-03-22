@@ -7,17 +7,12 @@ import com.orderme.ordermebackend.model.entity.GoodsType;
 import com.orderme.ordermebackend.repository.GoodsRepository;
 import com.orderme.ordermebackend.repository.GoodsTypeRepository;
 import com.orderme.ordermebackend.service.GoodsService;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.server.MethodNotAllowedException;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -83,9 +78,4 @@ public class GoodsServiceImpl implements GoodsService {
         goodsRepository.deleteById(id);
     }
 
-
-    @Override
-    public Collection<Goods> getAllNotPaginated() {
-        throw new NotImplementedException("This method is not implemented. Please, use the paginated analogue");
-    }
 }

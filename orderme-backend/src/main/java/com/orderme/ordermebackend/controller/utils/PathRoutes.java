@@ -11,6 +11,7 @@ public class PathRoutes {
     public static final String PATH_USERS = BASE_PATH + "/users";
     public static final String PATH_SHOPS = BASE_PATH + "/shops";
     public static final String PATH_GOODS_TYPES = BASE_PATH + "/goodsTypes";
+    public static final String PATH_GOODS_AVAILABILITIES = BASE_PATH + "/goodsAvailabilities";
 
     //Child routes
     public static final String CHILD_PATH_REGISTER = "/register";

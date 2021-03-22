@@ -9,12 +9,17 @@ import java.util.UUID;
 public class GoodsAvailabilitiesKey implements Serializable {
 
     @Column(name = "shopId")
-    private int shopId;
+    private Integer shopId;
 
     @Column(name = "goodsId")
     private UUID goodsId;
 
     public GoodsAvailabilitiesKey() {
+    }
+
+    public GoodsAvailabilitiesKey(Integer shopId, UUID goodsId) {
+        this.shopId = shopId;
+        this.goodsId = goodsId;
     }
 
     public UUID getGoodsId() {
@@ -25,11 +30,11 @@ public class GoodsAvailabilitiesKey implements Serializable {
         this.goodsId = goodsId;
     }
 
-    public int getShopId() {
+    public Integer getShopId() {
         return shopId;
     }
 
-    public void setShopId(int shopId) {
+    public void setShopId(Integer shopId) {
         this.shopId = shopId;
     }
 }

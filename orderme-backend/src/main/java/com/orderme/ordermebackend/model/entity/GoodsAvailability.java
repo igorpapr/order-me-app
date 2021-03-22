@@ -1,18 +1,26 @@
 package com.orderme.ordermebackend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
+
 import javax.persistence.*;
 
 @Entity(name = "goods_availabilities")
-public class GoodsAvailability implements AbstractEntity {
+@JsonIgnoreProperties({"hibernateLazyInitializer"}) //https://question-it.com/questions/533939/ne-najden-serializator-dlja-klassa-orghibernateproxypojobytebuddybytebuddyinterceptor-i-ne-najdeny-svojstva-dlja-sozdanija-beanserializer
+@Builder
+public class GoodsAvailability implements AbstractEntity<GoodsAvailabilitiesKey> {
 
     @EmbeddedId
     private GoodsAvailabilitiesKey goodsAvailabilitiesId;
 
+    @JsonIgnore
     @ManyToOne
     @MapsId("goodsId")
     @JoinColumn(name = "goods", nullable = false)
     private Goods goods;
 
+    @JsonIgnore
     @ManyToOne
     @MapsId("shopId")
     @JoinColumn(name = "shop", nullable = false)
@@ -22,6 +30,13 @@ public class GoodsAvailability implements AbstractEntity {
     private int amount = 0;
 
     public GoodsAvailability() {
+    }
+
+    public GoodsAvailability(GoodsAvailabilitiesKey goodsAvailabilitiesId, Goods goods, Shop shop, int amount) {
+        this.goodsAvailabilitiesId = goodsAvailabilitiesId;
+        this.goods = goods;
+        this.shop = shop;
+        this.amount = amount;
     }
 
     public GoodsAvailabilitiesKey getGoodsAvailabilitiesId() {

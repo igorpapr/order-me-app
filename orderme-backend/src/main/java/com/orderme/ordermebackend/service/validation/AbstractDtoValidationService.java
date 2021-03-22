@@ -10,9 +10,8 @@ public abstract class AbstractDtoValidationService<DTO extends AbstractDto> impl
         throw new IllegalArgumentException("Missing parameter: " + field + " in the given entity: " + clazz.getSimpleName());
     }
 
-//    protected void failWithMissingId(Class<DTO> clazz) {
-//        throw new IllegalArgumentException("Missing an id field value which is required for this operation for entity: "
-//                + clazz.getSimpleName());
-//    }
+    protected void failWithEmptyDto(Class<DTO> clazz) {
+        throw new IllegalArgumentException("The given entity is empty: " + clazz.getSimpleName());
+    }
 
 }

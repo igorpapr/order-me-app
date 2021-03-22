@@ -11,25 +11,33 @@ public class GoodsValidationServiceImpl extends AbstractDtoValidationService<Goo
 
     @Override
     public void validateCreate(GoodsDto dto) {
-        if (dto.getTitle() == null) {
-            failWithMissingParameter("title");
-        }
-        if (dto.getGoodsTypeId() == null) {
-            failWithMissingParameter("goodsType");
-        }
-        if (dto.getActualPrice() == null) {
-            failWithMissingParameter("actualPrice");
-        }
-        if (dto.getOldPrice() == null) {
-            failWithMissingParameter("oldPrice");
-        }
+        if (dto != null) {
+            if (dto.getTitle() == null) {
+                failWithMissingParameter("title");
+            }
+            if (dto.getGoodsTypeId() == null) {
+                failWithMissingParameter("goodsType");
+            }
+            if (dto.getActualPrice() == null) {
+                failWithMissingParameter("actualPrice");
+            }
+            if (dto.getOldPrice() == null) {
+                failWithMissingParameter("oldPrice");
+            }
 
-        checkPrices(dto);
+            checkPrices(dto);
+        } else {
+            failWithEmptyDto(GoodsDto.class);
+        }
     }
 
     @Override
     public void validatePatch(GoodsDto dto) {
-        checkPrices(dto);
+        if (dto != null) {
+            checkPrices(dto);
+        } else {
+            failWithEmptyDto(GoodsDto.class);
+        }
     }
 
     private void checkPrices(GoodsDto dto) {
@@ -49,4 +57,5 @@ public class GoodsValidationServiceImpl extends AbstractDtoValidationService<Goo
     protected void failWithMissingParameter(String field) {
         failWithMissingParameter(field, GoodsDto.class);
     }
+
 }

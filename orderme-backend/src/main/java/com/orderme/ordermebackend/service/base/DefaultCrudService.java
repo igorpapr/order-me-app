@@ -1,14 +1,9 @@
-package com.orderme.ordermebackend.service;
+package com.orderme.ordermebackend.service.base;
 
 import com.orderme.ordermebackend.model.dto.AbstractDto;
 import com.orderme.ordermebackend.model.entity.AbstractEntity;
 
-import java.util.Collection;
-
-public interface CrudService<Id, E extends AbstractEntity<Id>, D extends AbstractDto> {
-
-    Collection<E> getAllNotPaginated();
-
+public interface DefaultCrudService<Id, E extends AbstractEntity<Id>, D extends AbstractDto> {
     E create(D dto);
 
     E getById(Id id);
@@ -16,5 +11,6 @@ public interface CrudService<Id, E extends AbstractEntity<Id>, D extends Abstrac
     E patch(D dto, Id id);
 
     void delete(Id id);
+
 
 }
