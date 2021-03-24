@@ -53,7 +53,7 @@ public class GoodsController {
     @PatchMapping("/{id}")
     public ResponseEntity<Goods> updateGoods(@RequestBody GoodsDto goodsDto, @PathVariable UUID id) {
         goodsValidationService.validatePatch(goodsDto);
-        return new ResponseEntity<>(goodsService.patch(goodsDto, id), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(goodsService.patch(goodsDto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

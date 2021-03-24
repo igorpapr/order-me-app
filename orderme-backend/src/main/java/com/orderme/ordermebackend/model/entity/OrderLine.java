@@ -1,9 +1,15 @@
 package com.orderme.ordermebackend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
+
 import javax.persistence.*;
 
 @Entity(name = "order_lines")
-public class OrderLine implements AbstractEntity {
+@Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer"}) //https://question-it.com/questions/533939/ne-najden-serializator-dlja-klassa-orghibernateproxypojobytebuddybytebuddyinterceptor-i-ne-najdeny-svojstva-dlja-sozdanija-beanserializer
+public class OrderLine implements AbstractEntity<OrderLinesKey> {
 
     @EmbeddedId
     private OrderLinesKey orderLineId;
@@ -11,17 +17,26 @@ public class OrderLine implements AbstractEntity {
     @ManyToOne
     @MapsId("orderId")
     @JoinColumn(name = "salesOrder", nullable = false)
+    @JsonIgnore
     private Order salesOrder;
 
     @ManyToOne
     @MapsId("goodsId")
     @JoinColumn(name = "goods", nullable = false)
+    @JsonIgnore
     private Goods goods;
 
     @Column(nullable = false)
     private int amount;
 
     public OrderLine() {
+    }
+
+    public OrderLine(OrderLinesKey orderLineId, Order salesOrder, Goods goods, int amount) {
+        this.orderLineId = orderLineId;
+        this.salesOrder = salesOrder;
+        this.goods = goods;
+        this.amount = amount;
     }
 
     public OrderLinesKey getOrderLineId() {

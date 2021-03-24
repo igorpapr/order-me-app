@@ -1,5 +1,6 @@
 package com.orderme.ordermebackend.model.entity;
 
+import lombok.Builder;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -8,7 +9,8 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "orders")
-public class Order implements AbstractEntity {
+@Builder
+public class Order implements AbstractEntity<UUID> {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -35,10 +37,27 @@ public class Order implements AbstractEntity {
     @Column(nullable = false)
     private OrderStatus orderStatus;
 
-    @OneToMany(mappedBy = "salesOrder")
+    @OneToMany(mappedBy = "salesOrder", fetch = FetchType.EAGER)
+    @Column(insertable = false)
     private Set<OrderLine> orderLines;
 
+    @ManyToOne
+    @JoinColumn(name="shop", referencedColumnName = "shopId")
+    private Shop shop;
+
     public Order() {
+    }
+
+    public Order(UUID orderID, LocalDateTime creationTime, LocalDateTime lastUpdateTime, User createdBy,
+                 User processingBy, OrderStatus orderStatus, Set<OrderLine> orderLines, Shop shop) {
+        this.orderID = orderID;
+        this.creationTime = creationTime;
+        this.lastUpdateTime = lastUpdateTime;
+        this.createdBy = createdBy;
+        this.processingBy = processingBy;
+        this.orderStatus = orderStatus;
+        this.orderLines = orderLines;
+        this.shop = shop;
     }
 
     public UUID getOrderID() {
@@ -95,5 +114,13 @@ public class Order implements AbstractEntity {
 
     public void setOrderLines(Set<OrderLine> orderLines) {
         this.orderLines = orderLines;
+    }
+
+    public Shop getShop() {
+        return shop;
+    }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 }

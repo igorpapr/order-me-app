@@ -1,5 +1,7 @@
 package com.orderme.ordermebackend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -10,7 +12,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 @Builder
-public class User implements AbstractEntity {
+@JsonIgnoreProperties({"hibernateLazyInitializer"}) //https://question-it.com/questions/533939/ne-najden-serializator-dlja-klassa-orghibernateproxypojobytebuddybytebuddyinterceptor-i-ne-najdeny-svojstva-dlja-sozdanija-beanserializer
+public class User implements AbstractEntity<UUID> {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -24,6 +27,7 @@ public class User implements AbstractEntity {
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
@@ -33,9 +37,11 @@ public class User implements AbstractEntity {
     @Column(nullable = false)
     private String lastName;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "createdBy")
     private Set<Order> createdOrders;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "processingBy")
     private Set<Order> processingOrders;
 

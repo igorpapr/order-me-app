@@ -49,9 +49,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers(PathRoutes.PATH_AUTH + PathRoutes.CHILD_PATH_AUTH).permitAll()
                 .antMatchers(PathRoutes.CHILD_PATH_ADMIN_REGISTER).hasAuthority("SUPER_ADMIN")
-                .anyRequest().authenticated()
+                //.antMatchers(PathRoutes.PATH_AUTH + PathRoutes.CHILD_PATH_AUTH).permitAll()
+                .anyRequest().permitAll()//.authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }

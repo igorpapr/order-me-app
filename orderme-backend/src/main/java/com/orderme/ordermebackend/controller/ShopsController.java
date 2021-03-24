@@ -39,7 +39,7 @@ public class ShopsController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> patchShop(@RequestBody ShopDto shopDto, @PathVariable Integer id) {
-        return new ResponseEntity<>(shopService.patch(shopDto, id), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(shopService.patch(shopDto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

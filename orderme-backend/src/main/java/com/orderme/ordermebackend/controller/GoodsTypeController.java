@@ -41,7 +41,7 @@ public class GoodsTypeController {
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateGoods(@RequestBody GoodsTypeDto goodsTypeDto, @PathVariable Integer id) {
         goodsTypeDtoValidationService.validatePatch(goodsTypeDto);
-        return new ResponseEntity<>(goodsTypeService.patch(goodsTypeDto, id), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(goodsTypeService.patch(goodsTypeDto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

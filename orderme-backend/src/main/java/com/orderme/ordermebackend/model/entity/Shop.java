@@ -27,14 +27,19 @@ public class Shop implements AbstractEntity<Integer> {
     @JsonIgnore
     private Set<GoodsAvailability> goodsAvailabilities;
 
+    @OneToMany(mappedBy = "shop")
+    @JsonIgnore
+    private Set<Order> orders;
+
     public Shop() {
     }
 
-    public Shop(Integer shopId, String address, String title, Set<GoodsAvailability> goodsAvailabilities) {
+    public Shop(Integer shopId, String address, String title, Set<GoodsAvailability> goodsAvailabilities, Set<Order> orders) {
         this.shopId = shopId;
         this.address = address;
         this.title = title;
         this.goodsAvailabilities = goodsAvailabilities;
+        this.orders = orders;
     }
 
     public Integer getShopId() {
@@ -67,5 +72,13 @@ public class Shop implements AbstractEntity<Integer> {
 
     public void setGoodsAvailabilities(Set<GoodsAvailability> goodsAvailabilities) {
         this.goodsAvailabilities = goodsAvailabilities;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 }

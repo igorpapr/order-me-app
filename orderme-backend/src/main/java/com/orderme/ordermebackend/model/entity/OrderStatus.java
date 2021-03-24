@@ -5,5 +5,6 @@ public enum OrderStatus {
     WAITING_FOR_PROCESSING,
     PROCESSING,
     COLLECTING,
-    READY
+    READY,
+    CANCELED;
 }

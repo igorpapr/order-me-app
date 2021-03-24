@@ -11,7 +11,7 @@ public abstract class AbstractDtoValidationService<DTO extends AbstractDto> impl
     }
 
     protected void failWithEmptyDto(Class<DTO> clazz) {
-        throw new IllegalArgumentException("The given entity is empty: " + clazz.getSimpleName());
+        throw new IllegalArgumentException("The given entity is null or could not be processed: " + clazz.getSimpleName());
     }
 
 }

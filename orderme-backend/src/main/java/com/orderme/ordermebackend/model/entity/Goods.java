@@ -1,6 +1,7 @@
 package com.orderme.ordermebackend.model.entity;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;

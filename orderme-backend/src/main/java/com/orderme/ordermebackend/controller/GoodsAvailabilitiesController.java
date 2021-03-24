@@ -46,7 +46,7 @@ public class GoodsAvailabilitiesController {
                                         @RequestParam Integer shopId,
                                         @RequestParam UUID goodsId) {
         return new ResponseEntity<>(goodsAvailabilityService.patchByShopIdAndGoodsId(goodsAvailabilityDto, shopId, goodsId),
-                HttpStatus.NO_CONTENT);
+                HttpStatus.OK);
     }
 
     @DeleteMapping
