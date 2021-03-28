@@ -23,7 +23,7 @@ public class OrderLine implements AbstractEntity<OrderLinesKey> {
     @ManyToOne
     @MapsId("goodsId")
     @JoinColumn(name = "goods", nullable = false)
-    @JsonIgnore
+//    @JsonIgnore
     private Goods goods;
 
     @Column(nullable = false)

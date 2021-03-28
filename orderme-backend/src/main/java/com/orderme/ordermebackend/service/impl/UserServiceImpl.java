@@ -9,6 +9,7 @@ import com.orderme.ordermebackend.model.entity.Role;
 import com.orderme.ordermebackend.model.entity.User;
 import com.orderme.ordermebackend.repository.UserRepository;
 import com.orderme.ordermebackend.service.UserService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -40,7 +41,11 @@ public class UserServiceImpl implements UserService {
                 .lastName(request.getLastName())
                 .role(role)
                 .build();
-        userRepository.save(userToCreate);
+        try {
+            userRepository.save(userToCreate);
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("The user with email " + request.getEmail() + " already exists.");
+        }
     }
 
     @Override

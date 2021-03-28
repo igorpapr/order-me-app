@@ -1,6 +1,7 @@
 package com.orderme.ordermebackend.service.impl;
 
 import com.orderme.ordermebackend.model.dto.security.AuthenticationRequest;
+import com.orderme.ordermebackend.model.entity.security.UserDetailsImpl;
 import com.orderme.ordermebackend.service.AuthenticationService;
 import com.orderme.ordermebackend.utils.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,6 +30,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-        return JwtUtils.generateJWTToken(userDetails);
+        return JwtUtils.generateJWTToken((UserDetailsImpl) userDetails);
     }
 }

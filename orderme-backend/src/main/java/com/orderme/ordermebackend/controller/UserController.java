@@ -2,6 +2,7 @@ package com.orderme.ordermebackend.controller;
 
 import com.orderme.ordermebackend.controller.utils.PathRoutes;
 import com.orderme.ordermebackend.model.dto.UserDto;
+import com.orderme.ordermebackend.model.entity.User;
 import com.orderme.ordermebackend.service.UserService;
 import com.orderme.ordermebackend.service.validation.DtoValidationService;
 import org.springframework.http.HttpStatus;
@@ -25,12 +26,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable UUID id) {
+    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
         return new ResponseEntity<>(userService.getById(id), HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> patchUserById(@RequestBody UserDto dto, @PathVariable UUID id) {
+    public ResponseEntity<User> patchUserById(@RequestBody UserDto dto, @PathVariable UUID id) {
         userDtoDtoValidationService.validatePatch(dto);
         return new ResponseEntity<>(userService.patchUserById(dto, id), HttpStatus.OK);
     }

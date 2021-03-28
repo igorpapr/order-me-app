@@ -9,6 +9,7 @@ import com.orderme.ordermebackend.model.entity.security.AuthenticationResponse;
 import com.orderme.ordermebackend.service.AuthenticationService;
 import com.orderme.ordermebackend.service.UserService;
 import com.orderme.ordermebackend.service.validation.DtoValidationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(PathRoutes.PATH_AUTH)
+@Slf4j
 public class AuthenticationController {
 
     private final UserService userService;
@@ -35,6 +37,7 @@ public class AuthenticationController {
 
     @PostMapping(PathRoutes.CHILD_PATH_AUTH)
     public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest credentials) {
+        log.info("Incoming authentication request: " + credentials.toString());
         AuthenticationResponse response =
                 new AuthenticationResponse(authenticationService.authenticateAndCreateJwt(credentials));
         return ResponseEntity.ok(response);

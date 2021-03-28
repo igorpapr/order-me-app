@@ -12,6 +12,8 @@ import java.util.UUID;
 public class UserDetailsImpl implements UserDetails {
 
     private final UUID userId;
+    private final String firstName;
+    private final String lastName;
     private final String email;
     private final String password;
     private final List<GrantedAuthority> authorities;
@@ -21,6 +23,8 @@ public class UserDetailsImpl implements UserDetails {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.authorities = Collections.singletonList(user.getRole());
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
     }
 
     @Override
@@ -56,5 +60,17 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }

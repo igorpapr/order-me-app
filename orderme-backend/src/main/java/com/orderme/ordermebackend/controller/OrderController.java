@@ -46,12 +46,12 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOrderById(@PathVariable UUID id) {
+    public ResponseEntity<Order> getOrderById(@PathVariable UUID id) {
         return new ResponseEntity<>(orderService.getById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> addNewOrder(@RequestBody OrderDto goodsDto) {
+    public ResponseEntity<Order> addNewOrder(@RequestBody OrderDto goodsDto) {
         orderDtoValidationService.validateCreate(goodsDto);
         return new ResponseEntity<>(orderService.create(goodsDto), HttpStatus.CREATED);
     }

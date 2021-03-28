@@ -8,6 +8,9 @@ import { HttpClientModule } from "@angular/common/http";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {SharedModule} from "./modules/shared/shared.module";
+import {OrdersModule} from "./modules/orders/orders.module";
+import {GoodsModule} from "./modules/goods/goods.module";
+import {AuthModule} from "./modules/auth/auth.module";
 
 @NgModule({
   declarations: [
@@ -17,11 +20,13 @@ import {SharedModule} from "./modules/shared/shared.module";
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    CoreModule,
     NgbModule,
+    CoreModule,
     FontAwesomeModule,
     SharedModule,
-
+    OrdersModule,
+    GoodsModule,
+    AuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]

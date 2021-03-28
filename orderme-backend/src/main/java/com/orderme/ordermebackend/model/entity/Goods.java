@@ -1,7 +1,7 @@
 package com.orderme.ordermebackend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -35,6 +35,7 @@ public class Goods implements AbstractEntity<UUID> {
 
     private String imageLink;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "goods")
     private Set<OrderLine> orderLines;
 

@@ -1,9 +1,6 @@
 package com.orderme.ordermebackend.model.dto;
 
-import com.orderme.ordermebackend.model.entity.Role;
 import lombok.Builder;
-
-import java.util.UUID;
 
 @Builder
 public class UserDto implements AbstractDto {

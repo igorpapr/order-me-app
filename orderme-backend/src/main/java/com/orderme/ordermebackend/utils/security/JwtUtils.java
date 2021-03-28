@@ -1,8 +1,11 @@
 package com.orderme.ordermebackend.utils.security;
 
+import com.orderme.ordermebackend.model.entity.security.UserDetailsImpl;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -23,12 +26,14 @@ public class JwtUtils {
      * @param userDetails - current user details provided by UserDetailsService
      * @return generated JWT token
      */
-    public static String generateJWTToken(UserDetails userDetails) {
+    public static String generateJWTToken(UserDetailsImpl userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        //claims.put("username",userDetails.getUsername());
-        //claims.put("userId",userDetails.getUsername());
-        //claims.put("username",userDetails.getUsername());
-        //claims.put("username",userDetails.getUsername());
+        claims.put("userId", userDetails.getUserId());
+        claims.put("fistName", userDetails.getFirstName());
+        claims.put("lastName", userDetails.getLastName());
+        claims.put("userRole", userDetails.getAuthorities().stream().findFirst().orElseThrow(
+                () -> new RuntimeException("Couldn't get user roles to put into jwt token")
+        ));
         return createJWTToken(claims, userDetails);
     }
 
@@ -48,10 +53,6 @@ public class JwtUtils {
     private static <T> T extractClaimByField(String token, Function<Claims, T> claimsResolver) {
         return claimsResolver.apply(extractClaim(token));
     }
-
-//    private static boolean isTokenExpired(String token) {
-//        return extractExpirationDate(token).before(new Date());
-//    }
 
     private static Claims extractClaim(String token) {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();

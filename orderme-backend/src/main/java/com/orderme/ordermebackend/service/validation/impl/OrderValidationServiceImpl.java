@@ -118,6 +118,7 @@ public class OrderValidationServiceImpl extends AbstractDtoValidationService<Ord
         OrderStatus currentOrderStatus = orderService.getById(dto.getOrderId()).getOrderStatus();
         switch (targetOrderStatus) {
             case READY:
+            case COMPLETED:
                 if (currentOrderStatus.equals(OrderStatus.CANCELED)) {
                     failWithIncorrectStatusChange(targetOrderStatus, currentOrderStatus);
                 }
@@ -138,6 +139,7 @@ public class OrderValidationServiceImpl extends AbstractDtoValidationService<Ord
                 }
                 break;
             case CANCELED:
+                break;
         }
     }
 
