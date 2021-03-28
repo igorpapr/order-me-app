@@ -1,9 +1,16 @@
 <div class="container">
   <div class="row">
-    Search area to the right
+    Search area to the right (MAYBE NEW COMPONENT)
   </div>
   <div class="row">
-    Grid
+    <div *ngFor="let item of goodsTypeSet">
+      <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{item.title}}</h5>
+            <p class="card-text">{{item.description}}</p>
+            <button (click)="navigate($event, item.goodsTypeId, item.title)" class="card-link">Show</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
-</div>

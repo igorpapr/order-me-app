@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="row">
+    <h2>
+      {{state}}
+    </h2>
+  </div>
+  <div class="row">
+    Search area to the right (MAYBE NEW COMPONENT) + SELECT shopId
+  </div>
+  <div class="row">
+    <div *ngFor="let item of goodsList">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{item.title}}</h5>
+          <p class="card-text">{{item.description}}</p>
+          <p class="card-text">{{item.oldPrice}}</p>
+          <p class="card-text">{{item.actualPrice}}</p>
+          <p *ngIf="this.shopId" class="card-text">{{item.goodsAvailabilities}}</p>
+          <button routerLink="/goods/{{item.goodsId}}" class="card-link">Show</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="paginationObject" class="row">
+    <ngb-pagination [collectionSize]="paginationObject ? paginationObject.totalElements : 0" [pageSize]="pageSize" [(page)]="currentPage" [maxSize]="5" (pageChange)="changePage($event)"></ngb-pagination>
+  </div>
+</div>

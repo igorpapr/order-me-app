@@ -46,7 +46,7 @@ public class GoodsController {
     public ResponseEntity<Goods> getGoodsById(@RequestParam(required = false) Integer shopId,
                                               @PathVariable UUID id) {
         Goods result;
-        if (shopId != null) {
+        if (shopId == null) {
             result = goodsService.getById(id);
         } else {
             result = goodsService.getByIdAndShopId(shopId, id);

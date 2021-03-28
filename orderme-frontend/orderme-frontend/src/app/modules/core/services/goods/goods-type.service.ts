@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import {environment} from "../../../../../environments/environment";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {HandleErrorsService} from "../util/handle-errors.service";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {GoodsType} from "../../model/goods-type";
-import {catchError} from "rxjs/operators";
+import {catchError, first} from "rxjs/operators";
 import {GoodsTypeDto} from "../../model/dto/goodsTypeDto";
+import {Page} from "../../model/page";
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +23,24 @@ export class GoodsTypeService {
 
   constructor(private http: HttpClient,
               private handleErrorsService: HandleErrorsService) {
+    // @ts-ignore
   }
 
   /**
    * Get a list of goods types
    */
-  public getAllGoodsTypesList(): Observable<GoodsType> {
-    return this.http.get<GoodsType>(this.GOODS_TYPES_URL, this.httpOptions)
-      .pipe(catchError(this.handleErrorsService.handleError<GoodsType>('getAllGoodsTypesList', undefined)));
+  public getAllGoodsTypesList(): Observable<GoodsType[]> {
+    return this.http.get<GoodsType[]>(this.GOODS_TYPES_URL, this.httpOptions)
+      .pipe(catchError(this.handleErrorsService.handleError<GoodsType[]>('getAllGoodsTypesList', [])));
+  }
+
+  /**
+   * Get a goods type by id
+   */
+  public getGoodsTypeById(goodsTypeId: number): Observable<GoodsType> {
+    return this.http.get<GoodsType>(this.GOODS_TYPES_URL + '/' + goodsTypeId,
+      this.httpOptions).pipe(
+        catchError(this.handleErrorsService.handleError<GoodsType>('getGoodsTypeById')));
   }
 
   /**

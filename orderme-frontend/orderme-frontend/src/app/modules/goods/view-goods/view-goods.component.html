@@ -1,0 +1,46 @@
+<div *ngIf="!isLoading" class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2>{{currentGoods.title}}</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h3>{{currentGoods.description}}
+      </h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h3>{{currentGoods.oldPrice}}
+      </h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h3>{{currentGoods.actualPrice}}
+      </h3>
+    </div>
+  </div>
+  <div *ngIf="currentGoods.goodsType" class="row">
+    <div class="col-12">
+      <h3 *ngIf="currentGoods.goodsType.title">{{currentGoods.goodsType.title}}
+      </h3>
+    </div>
+  </div>
+  <div *ngIf="currentShopId" class="row">
+    <div class="col-12">
+      <h3 *ngFor="let item of currentGoods.goodsAvailabilities">
+        {{item.amount}}
+      </h3>
+    </div>
+  </div>
+  <div>
+    GET AMOUNT HERE
+  </div>
+  <div class="row">
+    <button class="btn btn-primary">
+      Add to cart
+    </button>
+  </div>
+</div>

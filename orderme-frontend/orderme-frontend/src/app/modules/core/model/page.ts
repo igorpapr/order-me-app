@@ -2,11 +2,13 @@ import {Pageable} from "./pageable";
 import {Sort} from "./sort";
 
 export class Page<Type> {
-  content: Type[] | undefined;
+  // @ts-ignore
+  content: Type[];
   pageable: Pageable | undefined;
   last: boolean | undefined;
   totalPages: number | undefined;
-  totalElemets: number | undefined;
+  // @ts-ignore
+  totalElements: number;
   number: number | undefined;
   size: number | undefined;
   sort: Sort | undefined;
