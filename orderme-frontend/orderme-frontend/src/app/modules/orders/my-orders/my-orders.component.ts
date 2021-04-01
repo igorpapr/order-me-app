@@ -8,7 +8,6 @@ import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 import {ToastsService} from "../../core/services/util/toasts.service";
 import {OrderStatus} from "../../core/model/order-status";
 import {DateService} from "../../core/services/util/date.service";
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-my-orders',

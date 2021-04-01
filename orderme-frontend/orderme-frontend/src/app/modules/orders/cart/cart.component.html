@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row">
+    <h1 class="col">CART</h1>
+  </div>
+  <hr>
+  <div *ngIf="cartListObservable">
+    <div class="row" *ngFor="let item of (cartListObservable | async)">
+      <div class="col">{{item.goods.title}}</div>
+      <div class="col">${{item.goods.actualPrice}}</div>
+      <div class="col">{{item.amount}}</div>
+      <div class="col">
+        <button (click)="removeItem(item.goods.goodsId)">
+          X
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <button (click)="checkout($event)" class="btn btn-primary">
+      Checkout
+    </button>
+  </div>
+  <div class="row" *ngIf="isEmpty">
+      The cart is empty
+  </div>
+</div>

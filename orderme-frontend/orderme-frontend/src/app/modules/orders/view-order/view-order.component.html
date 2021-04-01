@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <h1>Order</h1>
+    </div>
+    <div *ngIf="currentOrder.creationTime" class="col-md-8">
+      <h5><em>Created: {{currentOrder.creationTime | date:dateService.datetimePattern:dateService.currentTimezone}}</em></h5>
+      <h5><em>Last updated: {{currentOrder.lastUpdateTime | date:dateService.datetimePattern:dateService.currentTimezone}}</em></h5>
+    </div>
+  </div>
+  <div class="row">
+    <div *ngIf="currentOrder.orderStatus" class="col">
+      <p>
+        <strong>Status: </strong>{{getOrderStatus(currentOrder.orderStatus)}}
+      </p>
+    </div>
+    <div *ngIf="isStatusEditable() && currentOrder.orderStatus">
+      <button (click)="cancelOrder()" class="btn btn-danger">Cancel this order</button>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div *ngIf="currentOrder.shop" class="col">
+      <p>
+        Shop: {{currentOrder.shop.title}} - {{currentOrder.shop.address}}
+      </p>
+    </div>
+  </div>
+  <hr>
+  <div class="row" *ngIf="isOrderEditable()">
+    <div class="col">
+      <button (click)="startEditing()" class="btn btn-info">Edit order items</button>
+    </div>
+    <div *ngIf="isEditModeEnabled">
+      <button class="btn btn-warning" (click)="cancelSaving()">Cancel</button>
+      <button class="btn btn-primary" (click)="saveOrderLines()">Save</button>
+    </div>
+  </div>
+  <div class="row">
+    <table *ngIf="currentOrder" class="table table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Title</th>
+          <th scope="col">Price</th>
+          <th scope="col">Amount</th>
+          <th *ngIf="isEditModeEnabled" scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of currentOrder.orderLines; let i = index">
+          <th scope="row">{{i+1}}</th>
+          <td>{{item.goods.title}}</td>
+          <td>{{item.goods.actualPrice}}</td>
+          <td *ngIf="!isEditModeEnabled">{{item.amount}}</td>
+          <td (change)="recalculateFullPrice()" *ngIf="isEditModeEnabled"><input type="number" [min]="1" [max]="999" placeholder="{{item.amount}}" [(ngModel)]="item.amount" oninput="validity.valid||(value='');"></td>
+          <td *ngIf="isEditModeEnabled">
+            <div>
+              <button class="btn btn-danger ml-1">X</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <hr>
+  <div *ngIf="currentOrder" class="row">
+    <div class="col text-right">
+      <strong>Total order price: ${{currentOrder.fullPrice}}</strong>
+    </div>
+  </div>
+</div>
