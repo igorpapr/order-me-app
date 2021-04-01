@@ -9,6 +9,7 @@ import {ToastsService} from "../util/toasts.service";
 import {OrderLineDto} from "../../model/dto/order-line-dto";
 import {Router} from "@angular/router";
 import {LocalStorageService} from "../util/local-storage.service";
+import {Order} from "../../model/order";
 
 @Injectable({
   providedIn: 'root'
@@ -61,7 +62,7 @@ export class CartService {
     }
   }
 
-  public checkout(shopId: number): void {
+  public checkout(shopId: number): Observable<Order> | null {
     //todo CHECK IF USER IS SIGNED IN!!!!!!!!!!!!!!!!
     let orderDto: OrderDto = new OrderDto();
     orderDto.orderLines = [];
@@ -74,19 +75,10 @@ export class CartService {
         orderLine.goodsId = item.goods.goodsId;
         orderDto.orderLines.push(orderLine);
       }
-      this.orderService.createOrder(orderDto)
-        .subscribe((data) => {
-          this.toastsService.toastAddSuccess("Your order has been successfully created.");
-          this.localStorageService.clearCart();
-          this.router.navigateByUrl('/my-orders/' + data.orderId);
-        },
-          error => {
-          console.error(error);
-          this.toastsService.toastAddDanger("Something went wrong during your order processing. " +
-            "Please, contact the administrator");
-          });
+      return this.orderService.createOrder(orderDto);
     } else {
       this.toastsService.toastAddWarning("Please, sign in or create new account to process your order.");
+      return null;
     }
   }
 

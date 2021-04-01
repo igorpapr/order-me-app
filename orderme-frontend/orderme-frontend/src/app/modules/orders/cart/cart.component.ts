@@ -3,6 +3,9 @@ import {AuthenticationService} from "../../core/services/auth/authentication.ser
 import {CartService} from "../../core/services/orders/cart.service";
 import {Observable, Subscription} from "rxjs";
 import {CartItem} from "../../core/model/cart-item";
+import {ToastsService} from "../../core/services/util/toasts.service";
+import {LocalStorageService} from "../../core/services/util/local-storage.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-cart',
@@ -17,7 +20,10 @@ export class CartComponent implements OnInit, OnDestroy {
   shopId: number;
 
   constructor(private authenticationService: AuthenticationService,
-              private cartService: CartService) {
+              private cartService: CartService,
+              private toastsService: ToastsService,
+              private localStorageService: LocalStorageService,
+              private router: Router) {
     this.cartListObservable = cartService.currentCartList$;
     //todo
     this.shopId = 4;
@@ -45,6 +51,16 @@ export class CartComponent implements OnInit, OnDestroy {
   checkout($event: MouseEvent) {
     $event.preventDefault();
 
-    this.cartService.checkout(this.shopId);
+    this.cartService.checkout(this.shopId)?.subscribe(
+      (data) => {
+          this.toastsService.toastAddSuccess("Your order has been successfully created.");
+          this.localStorageService.clearCart();
+          this.router.navigateByUrl('/orders/' + data.orderId);
+        },
+        error => {
+          console.error(error);
+          this.toastsService.toastAddDanger("Something went wrong during your order processing. " +
+            "Please, contact the administrator");
+        });
   }
 }
