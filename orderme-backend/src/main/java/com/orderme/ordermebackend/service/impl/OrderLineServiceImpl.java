@@ -4,10 +4,13 @@ import com.orderme.ordermebackend.model.dto.OrderLineDto;
 import com.orderme.ordermebackend.model.entity.*;
 import com.orderme.ordermebackend.repository.OrderLineRepository;
 import com.orderme.ordermebackend.service.OrderLineService;
+import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.UUID;
 
+@Service
 public class OrderLineServiceImpl implements OrderLineService {
 
     private final OrderLineRepository orderLineRepository;
@@ -17,29 +20,17 @@ public class OrderLineServiceImpl implements OrderLineService {
     }
 
     @Override
-    public OrderLine getByOrderIdAndGoodsId(UUID orderId, UUID goodsId) {
-        return null;
+    @Transactional
+    public OrderLine patchByOrderIdAndGoodsId(OrderLineDto dto) {
+        OrderLine orderLine =
+                orderLineRepository.findById(new OrderLinesKey(dto.getOrderId(), dto.getGoodsId()))
+                .orElseThrow(() -> new EntityNotFoundException("Couldn't find order line with orderId: " + dto.getOrderId() + ", goodsId: " + dto.getGoodsId()));
+        orderLine.setAmount(dto.getAmount());
+        return orderLineRepository.save(orderLine);
     }
 
     @Override
-    public OrderLine createByOrderIdAndGoodsId(OrderLineDto dto, UUID orderId, UUID goodsId) {
-//        OrderLine orderLine;
-//        OrderLinesKey id = new OrderLinesKey(orderId, goodsId);
-//
-//        if (!orderLineRepository.existsById(id)) {
-//            Goods goodsRef = goodsRepository.getOne(goodsId);
-//            Shop shopRef = shopRepository.getOne(shopId);
-//            goodsAvailability = GoodsAvailability.builder()
-//                    .goodsAvailabilitiesId(id)
-//                    .amount(dto.getAmount())
-//                    .goods(goodsRef)
-//                    .shop(shopRef)
-//                    .build();
-//        } else {
-//            throw new EntityExistsException("The goods availability with shopId: " + shopId +
-//                    " and goodsId: " + goodsId + " already exists.");
-//        }
-        //return goodsAvailabilityRepository.save(goodsAvailability);
-        return null;
+    public void deleteByOrderIdAndGoodsId(UUID orderId, UUID goodsId) {
+        orderLineRepository.deleteById(new OrderLinesKey(orderId, goodsId));
     }
 }

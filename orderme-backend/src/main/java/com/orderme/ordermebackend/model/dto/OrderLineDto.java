@@ -42,4 +42,13 @@ public class OrderLineDto implements AbstractDto {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+    @Override
+    public String toString() {
+        return "OrderLineDto{" +
+                "orderId=" + orderId +
+                ", goodsId=" + goodsId +
+                ", amount=" + amount +
+                '}';
+    }
 }

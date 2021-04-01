@@ -17,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(PathRoutes.PATH_ORDERS)
+@CrossOrigin
 public class OrderController {
 
     private final OrderService orderService;

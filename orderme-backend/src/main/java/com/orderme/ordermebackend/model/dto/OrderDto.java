@@ -83,4 +83,16 @@ public class OrderDto implements AbstractDto{
     public void setShopId(Integer shopId) {
         this.shopId = shopId;
     }
+
+    @Override
+    public String toString() {
+        return "OrderDto{" +
+                "orderId=" + orderId +
+                ", orderStatus=" + orderStatus +
+                ", createdById=" + createdById +
+                ", processingById=" + processingById +
+                ", orderLines=" + orderLines +
+                ", shopId=" + shopId +
+                '}';
+    }
 }

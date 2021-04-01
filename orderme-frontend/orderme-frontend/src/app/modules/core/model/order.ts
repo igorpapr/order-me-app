@@ -1,4 +1,6 @@
 import {OrderStatus} from "./order-status";
+import {OrderLine} from "./order-line";
+import {Shop} from "./shop";
 
 export class Order {
 
@@ -8,10 +10,20 @@ export class Order {
 
   lastUpdateTime: Date | undefined;
 
-  orderStatus: OrderStatus | undefined;
+  // @ts-ignore
+  orderStatus: OrderStatus;
 
   createdBy: string | undefined;
 
   processingBy: string | null | undefined;
+
+  // @ts-ignore
+  orderLines: OrderLine[];
+
+  // @ts-ignore
+  fullPrice: number;
+
+  // @ts-ignore
+  shop: Shop;
 
 }

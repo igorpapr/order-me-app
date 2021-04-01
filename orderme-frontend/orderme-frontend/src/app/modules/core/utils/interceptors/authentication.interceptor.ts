@@ -9,11 +9,13 @@ import { Observable } from 'rxjs';
 import {AuthenticationService} from "../../services/auth/authentication.service";
 import {environment} from "../../../../../environments/environment";
 import {UserData} from "../../model/user-data";
+import {LocalStorageService} from "../../services/util/local-storage.service";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
 
-  constructor(private authenticationService: AuthenticationService) {
+  constructor(private authenticationService: AuthenticationService,
+              private localStorageService: LocalStorageService) {
   }
 
   /**
@@ -28,7 +30,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     if ((currentUser) && isApiUrl) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${this.authenticationService.getJwtFromStorage()}`
+          Authorization: `Bearer ${this.localStorageService.getJwt()}`
         }
       });
     }

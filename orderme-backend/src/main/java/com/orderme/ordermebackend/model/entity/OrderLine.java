@@ -70,4 +70,12 @@ public class OrderLine implements AbstractEntity<OrderLinesKey> {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+    @Override
+    public String toString() {
+        return "OrderLine{" +
+                "orderLineId=" + orderLineId +
+                ", amount=" + amount +
+                '}';
+    }
 }

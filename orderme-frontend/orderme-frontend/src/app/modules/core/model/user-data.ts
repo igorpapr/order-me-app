@@ -1,7 +1,8 @@
 import {UserRole} from "./userRole";
 
 export class UserData {
-  userId: string | undefined;
+  // @ts-ignore
+  userId: string;
   firstName: string | undefined;
   lastName: string | undefined;
   userRole: UserRole | undefined;

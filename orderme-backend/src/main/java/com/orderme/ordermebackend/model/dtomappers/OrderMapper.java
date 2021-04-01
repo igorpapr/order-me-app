@@ -9,6 +9,10 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
+    /**
+     * NOTE! Composite embedded values doesn't map properly
+     * -> they need to be mapped by hands
+     */
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateOrderFromDto(OrderDto dto, @MappingTarget Order entity);
 }

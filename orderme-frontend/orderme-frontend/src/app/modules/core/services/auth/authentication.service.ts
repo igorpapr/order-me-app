@@ -8,6 +8,7 @@ import {UserData} from "../../model/user-data";
 import {AuthenticationRequestDto} from "../../model/dto/authenticationRequestDto";
 import {RegistrationRequestDto} from "../../model/dto/registrationRequestDto";
 import {HandleErrorsService} from "../util/handle-errors.service";
+import {LocalStorageService} from "../util/local-storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,6 @@ import {HandleErrorsService} from "../util/handle-errors.service";
 export class AuthenticationService {
 
   public readonly NUMBER_OF_HASHING_ITERATIONS = 5;
-  private readonly LOCAL_STORAGE_JWT_KEY = 'token';
   // private readonly LOCAL_STORAGE_USER_DATA_KEY = 'userData';
   private currentUserDataSubject: BehaviorSubject<UserData>;
   public currentUserData: Observable<UserData>;
@@ -32,25 +32,21 @@ export class AuthenticationService {
   };
 
   constructor(private http: HttpClient,
-              private handleErrorsService: HandleErrorsService) {
+              private handleErrorsService: HandleErrorsService,
+              private localStorageService: LocalStorageService) {
 
     //TODO check correctness
     this.currentUserDataSubject = new BehaviorSubject<UserData>(
       // @ts-ignore
-      localStorage.getItem(this.LOCAL_STORAGE_JWT_KEY)
+      this.localStorageService.getJwt()
         // @ts-ignore
-        ? jwt_decode(localStorage.getItem(this.LOCAL_STORAGE_JWT_KEY))
+        ? jwt_decode(this.localStorageService.getJwt())
         : undefined);
     this.currentUserData = this.currentUserDataSubject.asObservable();
   }
 
   public get currentUserValue(): UserData {
     return this.currentUserDataSubject.value;
-  }
-
-  public getJwtFromStorage(): string | null {
-    return localStorage.getItem(this.LOCAL_STORAGE_JWT_KEY);
-
   }
 
   /**
@@ -69,7 +65,7 @@ export class AuthenticationService {
         this.httpOptions)
       .pipe(map(data => {
         const jsonResponse: any = data;
-        localStorage.setItem(this.LOCAL_STORAGE_JWT_KEY, jsonResponse.jwt);
+        this.localStorageService.setJwt(jsonResponse.jwt);
         // @ts-ignore
         const decodedUserData: UserData = jwt_decode(jsonResponse.jwt);
         this.currentUserDataSubject.next(decodedUserData);
@@ -107,10 +103,11 @@ export class AuthenticationService {
 
   /**
    * Logs out the current user
-   * (also deletes jwt token from local storage)
+   * (also deletes jwt token and cart data from local storage)
    */
   public logOut(): void {
-    localStorage.removeItem(this.LOCAL_STORAGE_JWT_KEY);
+    this.localStorageService.removeJwt();
+    this.localStorageService.clearCart();
     // @ts-ignore
     this.currentUserDataSubject.next(null);
   }

@@ -38,9 +38,16 @@
   <div>
     GET AMOUNT HERE
   </div>
+  <div>
+    CURRENT AMOUNT HERE (now = 1)
+  </div>
   <div class="row">
-    <button class="btn btn-primary">
+    <button class="btn btn-primary" (click)="addToCart($event, linkToCartTpl)">
       Add to cart
     </button>
   </div>
 </div>
+
+<ng-template #linkToCartTpl>
+  Successfully added {{this.currentGoods.title}} to your <a routerLink="/cart">cart</a>.
+</ng-template>

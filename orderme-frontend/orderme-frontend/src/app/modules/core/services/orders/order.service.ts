@@ -37,23 +37,26 @@ export class OrderService {
    */
   public getOrdersList(page: number,
                        size: number,
-                       shopId: number,
-                       createdBy: string | null,
-                       processingBy: string | null,
+                       shopId: number | null,
+                       createdBy: any,
+                       processingBy: any,
                        status: OrderStatus | null): Observable<Page<Order>> {
 
     const requestParams: HttpParams = new HttpParams()
+      .set('page', String(page))
+      .set('size', String(size))
+      .set('sort', "creationTime,desc");
 
     if (createdBy !== null) {
-      requestParams.set('createdBy', createdBy);
+      requestParams.set('createdBy', String(createdBy));
     }
     if (processingBy !== null) {
-      requestParams.set('processingBy', processingBy);
+      requestParams.set('processingBy', String(processingBy));
     }
     if (status !== null) {
       requestParams.set('status', String(status))
     }
-    if (status !== null) {
+    if (shopId !== null) {
       requestParams.set('shopId', String(shopId))
     }
     return this.http.get<Page<Order>>(this.ORDERS_URL, {
@@ -63,19 +66,25 @@ export class OrderService {
   }
 
   public getOrderById(orderId: string): Observable<Order> {
-    return this.http.get<Order>(this.ORDERS_URL + '/' + orderId, this.httpOptions)
-      .pipe(catchError(this.handleErrorsService.handleError<any>('getOrderById')));
+    return this.http.get<Order>(this.ORDERS_URL + '/' + orderId, this.httpOptions);
+      // .pipe(catchError(this.handleErrorsService.handleError<any>('getOrderById')));
   }
 
   public createOrder(orderDto: OrderDto) {
-    console.log('Trying to create order: ' + orderDto);
-    return this.http.post<Order>(this.ORDERS_URL, orderDto, this.httpOptions)
-      .pipe(catchError(this.handleErrorsService.handleError<any>('createOrder')));
+    console.log('Trying to create order: ' + JSON.stringify(orderDto));
+    return this.http.post<Order>(this.ORDERS_URL, orderDto, this.httpOptions);
+ //     .pipe(catchError(this.handleErrorsService.handleError<any>('createOrder')));
   }
 
   public patchOrder(orderDto: OrderDto, orderId: string) {
-    console.log('Trying to patchOrder with id ' + orderId + '. OrderToPatch: ' + orderDto);
-    return this.http.patch<Order>(this.ORDERS_URL + '/' + orderId, orderDto, this.httpOptions)
-      .pipe(catchError(this.handleErrorsService.handleError<any>('patchOrder')));
+    console.log('Trying to patchOrder with id ' + orderId + '. OrderToPatch: ' + JSON.stringify(orderDto));
+    return this.http.patch<Order>(this.ORDERS_URL + '/' + orderId, orderDto, this.httpOptions);
+  }
+
+  public getOrderStatusKey(status: OrderStatus): string{
+    // @ts-ignore
+    return Object.keys(OrderStatus)
+      // @ts-ignore
+      .find(key => OrderStatus[key] == status);
   }
 }

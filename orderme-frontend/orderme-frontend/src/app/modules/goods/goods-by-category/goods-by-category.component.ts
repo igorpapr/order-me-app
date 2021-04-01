@@ -6,7 +6,7 @@ import {ToastsService} from "../../core/services/util/toasts.service";
 import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 import {GoodsTypeService} from "../../core/services/goods/goods-type.service";
 import {Page} from "../../core/model/page";
-import {Observable, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-goods-by-category',
@@ -56,13 +56,14 @@ export class GoodsByCategoryComponent implements OnInit, OnDestroy {
       this.currentGoodsTypeId, this.currentPage - 1, this.pageSize)
       .subscribe(data => {
         this.paginationObject = data;
-        console.log(JSON.stringify(data));
+        //console.log(JSON.stringify(data));
         if (data.content?.length===0) {
           this.isEmpty = true;
         }
         this.goodsList = data.content;
         this.isLoading = false;
       }, error => {
+        console.error(error);
         this.toastsService.toastAddDanger('Something went wrong while fetching the goods list. Please, contact the administrator');
       }));
   }
@@ -73,6 +74,7 @@ export class GoodsByCategoryComponent implements OnInit, OnDestroy {
         this.state = data.title;
       },
         error => {
+        console.error(error);
         this.toastsService.toastAddDanger("Something went wrong while fetching the goods category title. " +
           "Please, contact the administrator");
         });

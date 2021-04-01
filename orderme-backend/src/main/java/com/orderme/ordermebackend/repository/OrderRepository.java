@@ -11,7 +11,8 @@ import org.springframework.data.repository.query.QueryByExampleExecutor;
 import java.util.UUID;
 
 public interface OrderRepository extends JpaRepository<Order, UUID>, QueryByExampleExecutor<Order> {
-//
+
+    //
 //    Page<Order> findAllByCreatedBy(User createdBy, Pageable pageable);
 //
 //    Page<Order> findAllByProcessingBy(User processingBy, Pageable pageable);

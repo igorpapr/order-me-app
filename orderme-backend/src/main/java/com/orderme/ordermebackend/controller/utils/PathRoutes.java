@@ -6,6 +6,7 @@ public class PathRoutes {
     public static final String BASE_PATH = "/api/v1";
     public static final String PATH_AUTH = BASE_PATH + "/auth";
     public static final String PATH_ORDERS = BASE_PATH + "/orders";
+    public static final String PATH_ORDER_LINES = BASE_PATH + "/ordersLines";
     public static final String PATH_STATUSES = BASE_PATH + "/statuses";
     public static final String PATH_GOODS = BASE_PATH + "/goods";
     public static final String PATH_USERS = BASE_PATH + "/users";

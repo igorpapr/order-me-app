@@ -2,7 +2,8 @@ import {GoodsType} from "./goods-type";
 import {GoodsAvailability} from "./goods-availability";
 
 export class Goods {
-  goodsId: string | undefined;
+  // @ts-ignore
+  goodsId: string;
 
   title: string | undefined;
 
@@ -10,7 +11,8 @@ export class Goods {
 
   oldPrice: number | undefined;
 
-  actualPrice: number | undefined;
+  // @ts-ignore
+  actualPrice: number;
 
   imageLink: string | null | undefined;
 

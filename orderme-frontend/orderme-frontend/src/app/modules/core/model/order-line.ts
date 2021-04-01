@@ -1,7 +1,18 @@
-export class OrderLine {
+import {Goods} from "./goods";
 
-  orderId: string | null | undefined;
-  goodsId: string | undefined;
-  amount: number | undefined;
+export class OrderLineIdKey {
+  // @ts-ignore
+  orderId: string;
+  // @ts-ignore
+  goodsId: string;
+}
+
+export class OrderLine {
+  // @ts-ignore
+  orderLineId: OrderLineIdKey;
+  // @ts-ignore
+  goods: Goods;
+  // @ts-ignore
+  amount: number;
 
 }
