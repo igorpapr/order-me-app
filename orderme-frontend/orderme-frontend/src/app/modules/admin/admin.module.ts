@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AdminCreationComponent } from './admin-creation/admin-creation.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {AdminCreationComponent} from './admin-creation/admin-creation.component';
 import {SharedModule} from "../shared/shared.module";
-import {FormsModule} from "@angular/forms";
-
+import {ReactiveFormsModule} from "@angular/forms";
+import {NgBootstrapFormValidationModule} from "ng-bootstrap-form-validation";
 
 
 @NgModule({
@@ -11,7 +11,8 @@ import {FormsModule} from "@angular/forms";
   imports: [
     CommonModule,
     SharedModule,
-    FormsModule
+    ReactiveFormsModule,
+    NgBootstrapFormValidationModule
   ]
 })
 export class AdminModule { }

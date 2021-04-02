@@ -98,7 +98,6 @@ export class AuthenticationService {
    */
   public registerAdmin(registrationRequest: RegistrationRequestDto): Observable<any> {
     return this.http.post<any>(this.ADMIN_REGISTER_URL, registrationRequest, this.httpOptions)
-      .pipe(catchError(this.handleErrorsService.handleError<any>('registerAdmin')));
   }
 
   /**
