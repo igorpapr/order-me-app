@@ -11,10 +11,13 @@ import {SharedModule} from "./modules/shared/shared.module";
 import {OrdersModule} from "./modules/orders/orders.module";
 import {GoodsModule} from "./modules/goods/goods.module";
 import {AuthModule} from "./modules/auth/auth.module";
+import { ProfileComponent } from './modules/profile/profile/profile.component';
+import {ProfileModule} from "./modules/profile/profile.module";
+import {AdminModule} from "./modules/admin/admin.module";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -24,9 +27,11 @@ import {AuthModule} from "./modules/auth/auth.module";
     CoreModule,
     FontAwesomeModule,
     SharedModule,
+    ProfileModule,
     OrdersModule,
     GoodsModule,
-    AuthModule
+    AuthModule,
+    AdminModule
   ],
   providers: [],
   bootstrap: [AppComponent]

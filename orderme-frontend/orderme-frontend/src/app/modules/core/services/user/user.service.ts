@@ -5,6 +5,7 @@ import {HandleErrorsService} from "../util/handle-errors.service";
 import {catchError} from "rxjs/operators";
 import {UserDto} from "../../model/dto/userDto";
 import {User} from "../../model/user";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +28,8 @@ export class UserService {
    * Get user by id
    * @param userId - user id to find
    */
-  public getUserById(userId: string) {
-    return this.http.get<User>(this.USERS_URL + '/' + userId, this.httpOptions)
-      .pipe(catchError(this.handleErrorsService.handleError<any>('getUserById')));
+  public getUserById(userId: string): Observable<User> {
+    return this.http.get<User>(this.USERS_URL + '/' + userId, this.httpOptions);
   }
 
   /**

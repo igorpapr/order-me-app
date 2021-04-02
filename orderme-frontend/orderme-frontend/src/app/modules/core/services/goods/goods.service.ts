@@ -46,8 +46,7 @@ export class GoodsService {
 
     return this.http.get<Page<Goods>>(this.GOODS_URL, {
       headers: this.httpOptions.headers,
-      params: requestParams})
-      .pipe(catchError(this.handleErrorsService.handleError<Page<Goods>>('getAllGoodsList', undefined)));
+      params: requestParams});
   }
 
   /**

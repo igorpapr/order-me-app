@@ -1,0 +1,43 @@
+<div class="container" *ngIf="currentUser">
+  <div class="row">
+    <div class="col">Email: </div>
+    <div *ngIf="!isEditModeEnabled" class="col">
+      {{currentUser.email}}
+    </div>
+    <div *ngIf="isEditModeEnabled" class="col">
+      <input type="email" placeholder="{{currentUser.email}}" [(ngModel)]="currentUser.email" oninput="validity.valid||(value='');">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">First name: </div>
+    <div *ngIf="!isEditModeEnabled" class="col">
+      {{currentUser.firstName}}
+    </div>
+    <div *ngIf="isEditModeEnabled" class="col">
+      <input type="text" placeholder="{{currentUser.firstName}}" [(ngModel)]="currentUser.firstName" oninput="validity.valid||(value='');">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">Last name: </div>
+    <div *ngIf="!isEditModeEnabled" class="col">
+      {{currentUser.lastName}}
+    </div>
+    <div *ngIf="isEditModeEnabled" class="col">
+      <input type="text" placeholder="{{currentUser.lastName}}" [(ngModel)]="currentUser.lastName" oninput="validity.valid||(value='');">
+    </div>
+  </div>
+  <div class="row">
+    <button *ngIf="!isEditModeEnabled" (click)="startEdit()" class="btn btn-info">
+      Edit
+    </button>
+    <button *ngIf="isEditModeEnabled" (click)="cancelEditing()" class="btn btn-warning">
+      Cancel
+    </button>
+    <button *ngIf="isEditModeEnabled" (click)="saveUserData()" class="btn btn-success">
+      Save
+    </button>
+    <button (click)="changePassword()" class="btn btn-primary">
+      Change password
+    </button>
+  </div>
+</div>

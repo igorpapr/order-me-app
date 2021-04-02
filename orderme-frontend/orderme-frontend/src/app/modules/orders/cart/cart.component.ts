@@ -52,15 +52,15 @@ export class CartComponent implements OnInit, OnDestroy {
     $event.preventDefault();
 
     this.cartService.checkout(this.shopId)?.subscribe(
-      (data) => {
+      data => {
           this.toastsService.toastAddSuccess("Your order has been successfully created.");
           this.localStorageService.clearCart();
           this.router.navigateByUrl('/orders/' + data.orderId);
-        },
-        error => {
+      },
+      error => {
           console.error(error);
           this.toastsService.toastAddDanger("Something went wrong during your order processing. " +
             "Please, contact the administrator");
-        });
+      });
   }
 }

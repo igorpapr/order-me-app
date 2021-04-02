@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row">
+    <h2>
+      Goods
+    </h2>
+  </div>
+  <div class="row">
+    Search area to the right (MAYBE NEW COMPONENT) + SELECT shopId (MAYBE NEW COMPONENT)
+  </div>
+  <div class="row" *ngIf="paginationObject">
+    <div class="col-md-4 card" *ngFor="let item of paginationObject.content">
+        <div class="card-body">
+          <h5 class="card-title">{{item.title}}</h5>
+          <p class="card-text">{{item.description}}</p>
+          <p class="card-text">{{item.oldPrice}}</p>
+          <p class="card-text">{{item.actualPrice}}</p>
+<!--       todo shopId - ? with availabilities, else - not available  -->
+          <p *ngIf="this.currentShopId" class="card-text">{{item.goodsAvailabilities}}</p>
+          <button routerLink="/goods/{{item.goodsId}}" class="card-link">Show</button>
+        </div>
+    </div>
+  </div>
+  <div *ngIf="paginationObject" class="row">
+    <ngb-pagination [collectionSize]="paginationObject ? paginationObject.totalElements : 0" [pageSize]="pageSize" [(page)]="currentPageNumber" [maxSize]="5" (pageChange)="changePage($event)"></ngb-pagination>
+  </div>
+</div>

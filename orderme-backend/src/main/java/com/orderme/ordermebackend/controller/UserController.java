@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(PathRoutes.PATH_USERS)
+@CrossOrigin
 public class UserController {
 
     private final UserService userService;
