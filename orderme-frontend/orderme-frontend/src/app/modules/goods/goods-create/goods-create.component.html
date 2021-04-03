@@ -29,15 +29,6 @@
           <option *ngFor="let item of goodsTypes" [ngValue]="item">{{item.title}}</option>
         </select>
       </div>
-
-      <p>
-        Form value: {{goodsCreationFormGroup.value | json}}
-      </p>
-
-      <p>
-        Form valid: {{goodsCreationFormGroup.valid}}
-      </p>
-
       <button class="btn btn-primary pull-right" [disabled]="!goodsCreationFormGroup.valid" type="submit">Submit</button>
     </form>
   </div>

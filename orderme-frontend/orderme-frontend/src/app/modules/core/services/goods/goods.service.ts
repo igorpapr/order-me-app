@@ -110,8 +110,17 @@ export class GoodsService {
    * @param goodsId - goods id of which goods to patch
    */
   public patchGoods(goodsToPatch: GoodsDto, goodsId: string) {
-    console.log('Trying to patch goods with id ' + goodsId + '. GoodsToPatch: ' + goodsToPatch);
+    console.log('Trying to patch goods with id ' + goodsId + '. GoodsToPatch: ' + JSON.stringify(goodsToPatch));
     return this.http.patch<Goods>(this.GOODS_URL + '/' + goodsId, goodsToPatch, this.httpOptions)
       .pipe(catchError(this.handleErrorsService.handleError<any>('patchGoods')));
+  }
+
+  /**
+   * Delete goods
+   * @param goodsId - goods id of which goods to delete
+   */
+  public deleteGoods(goodsId: string) {
+    console.log('Trying to delete goods with id ' + goodsId);
+    return this.http.delete<any>(this.GOODS_URL + '/' + goodsId, this.httpOptions);
   }
 }

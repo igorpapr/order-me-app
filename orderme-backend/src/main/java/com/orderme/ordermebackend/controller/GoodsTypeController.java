@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(PathRoutes.PATH_GOODS_TYPES)
+@CrossOrigin
 public class GoodsTypeController {
 
     private final GoodsTypeService goodsTypeService;

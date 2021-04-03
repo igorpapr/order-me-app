@@ -24,7 +24,6 @@ export class CategoryCreateComponent implements OnInit, OnDestroy {
     Description: new FormControl('', [
       Validators.minLength(4)
     ])
-    // @ts-ignore
   });
 
   constructor(private goodsTypeService: GoodsTypeService,

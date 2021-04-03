@@ -39,7 +39,7 @@
     <button *ngIf="isSignedIn" class="nav-item btn btn-outline-dark" routerLink="/profile">
       My profile
     </button>
-    <button class="nav-item btn btn-outline-dark"
+    <button *ngIf="!(isSuperAdmin || isAdmin)" class="nav-item btn btn-outline-dark"
             routerLink="/cart">
       Cart
     </button>

@@ -14,6 +14,7 @@
         <h5 class="card-header">{{item.title}}</h5>
         <div class="card-body">
             <p class="card-text">{{item.description}}</p>
+            <button *ngIf="isAdministrator" routerLink="/category-edit/{{item.goodsTypeId}}" class="btn btn-primary">Edit</button>
             <button (click)="navigate($event, item.goodsTypeId, item.title)" class="btn btn-info float-right">Show goods</button>
           </div>
         </div>

@@ -1,0 +1,47 @@
+<div *ngIf="isLoading">
+  <div class="card-body text-center">
+    <fa-icon [icon]="faSpinner" [spin]="true" size="8x"></fa-icon>
+  </div>
+</div>
+
+<div *ngIf="!isLoading && !isEditModeEnabled" class="container">
+  <div class="row">
+    <div class="col">
+      <button (click)="startEditing()" class="btn btn-info">Edit</button>
+      <button (click)="deleteCurrentGoodsType()" class="btn btn-danger">Delete</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2><strong>Title: </strong>{{currentGoodsType.title}}</h2>
+      <h2><strong>Description: </strong>{{currentGoodsType.description}}</h2>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col">
+      <button routerLink="/categories/{{currentGoodsTypeId}}" class="btn btn-primary">Show goods</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isEditModeEnabled && !isLoading">
+  <div class="container">
+    <div class="row">
+      <form [formGroup]="goodsTypeEditForm" (ngSubmit)="saveGoodsTypeEditing()" >
+        <div class="form-group">
+          <label class="control-label" for="title"><strong>Title</strong> <span class="text-danger">*</span> Old title: {{currentGoodsType.title}}</label>
+          <input type="text" class="form-control" id="title" aria-describedby="titleHelper" placeholder="Enter category title" formControlName="Title" required>
+          <small id="titleHelper" class="form-text text-muted">Enter the new category title</small>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="description"><strong>Description.</strong> Old description: {{currentGoodsType.description}}</label>
+          <input type="text" class="form-control" id="description" aria-describedby="descriptionHelper" placeholder="Enter description" formControlName="Description">
+          <small id="descriptionHelper" class="form-text text-muted">Enter the description</small>
+        </div>
+        <button class="btn btn-primary pull-right" [disabled]="!goodsTypeEditForm.valid" type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -11,18 +11,21 @@ import { CategoryCreateComponent } from './category-create/category-create.compo
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgBootstrapFormValidationModule} from "ng-bootstrap-form-validation";
 import { GoodsCreateComponent } from './goods-create/goods-create.component';
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import { CategoryEditComponent } from './category-edit/category-edit.component';
 
 
 
 @NgModule({
-  declarations: [CategoriesComponent, GoodsByCategoryComponent, ViewGoodsComponent, AllGoodsComponent, CategoryCreateComponent, GoodsCreateComponent],
+  declarations: [CategoriesComponent, GoodsByCategoryComponent, ViewGoodsComponent, AllGoodsComponent, CategoryCreateComponent, GoodsCreateComponent, CategoryEditComponent],
   imports: [
     CommonModule,
     SharedModule,
     CoreModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    NgBootstrapFormValidationModule
+    NgBootstrapFormValidationModule,
+    FontAwesomeModule
   ]
 })
 export class GoodsModule { }

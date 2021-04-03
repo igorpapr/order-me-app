@@ -1,53 +1,99 @@
-<div *ngIf="!isLoading" class="container">
+<div class="container">
   <div class="row">
-    <div class="col-12">
-      <h2>{{currentGoods.title}}</h2>
+    <div *ngIf="isAdministrator" class="col">
+      <button (click)="startEditing()" class="btn btn-info">Edit</button>
+      <button (click)="deleteCurrentGoods()" class="btn btn-danger">Delete</button>
     </div>
   </div>
-  <div class="row">
-    <div class="col-12">
-      <h3>{{currentGoods.description}}
-      </h3>
+  <div *ngIf="!isEditModeEnabled; else (isLoading ? loading : editing)">
+    <div class="row">
+      <div class="col-12">
+        <h2>{{currentGoods.title}}</h2>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <h3>{{currentGoods.oldPrice}}
-      </h3>
+    <div class="row">
+      <div class="col-12">
+        <h3>{{currentGoods.description}}
+        </h3>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <h3>{{currentGoods.actualPrice}}
-      </h3>
+    <div class="row">
+      <div class="col-12">
+        <h3>{{currentGoods.oldPrice}}
+        </h3>
+      </div>
     </div>
-  </div>
-  <div *ngIf="currentGoods.goodsType" class="row">
-    <div class="col-12">
-      <h3 *ngIf="currentGoods.goodsType.title">{{currentGoods.goodsType.title}}
-      </h3>
+    <div class="row">
+      <div class="col-12">
+        <h3>{{currentGoods.actualPrice}}
+        </h3>
+      </div>
     </div>
-  </div>
-  <div *ngIf="currentShopId" class="row">
-    <div class="col-12">
-      <h3 *ngFor="let item of currentGoods.goodsAvailabilities">
-        {{item.amount}}
-      </h3>
+    <div *ngIf="currentGoods.goodsType" class="row">
+      <div class="col-12">
+        <h3 *ngIf="currentGoods.goodsType.title">{{currentGoods.goodsType.title}}
+        </h3>
+      </div>
     </div>
-  </div>
-  <div>
-    GET AMOUNT HERE
-  </div>
-  <div>
-    CURRENT AMOUNT HERE (now = 1)
-  </div>
-  <div class="row">
-    <button class="btn btn-primary" (click)="addToCart($event, linkToCartTpl)">
-      Add to cart
-    </button>
+    <div *ngIf="currentShopId" class="row">
+      <div class="col-12">
+        <h3 *ngFor="let item of currentGoods.goodsAvailabilities">
+          {{item.amount}}
+        </h3>
+      </div>
+    </div>
+    <div>
+      GET AMOUNT HERE
+    </div>
+    <div>
+      CURRENT AMOUNT HERE (now = 1)
+    </div>
+    <div class="row">
+      <button class="btn btn-primary" (click)="addToCart($event, linkToCartTpl)">
+        Add to cart
+      </button>
+    </div>
   </div>
 </div>
 
 <ng-template #linkToCartTpl>
   Successfully added {{this.currentGoods.title}} to your <a routerLink="/cart">cart</a>.
+</ng-template>
+
+<ng-template #loading>
+  <div class="card-body text-center">
+    <fa-icon [icon]="faSpinner" [spin]="true" size="8x"></fa-icon>
+  </div>
+</ng-template>
+
+<ng-template #editing>
+  <div class="row">
+    <form [formGroup]="goodsEditFormGroup" (ngSubmit)="saveGoodsEditing()" >
+      <div class="form-group">
+        <label class="control-label" for="title">Title <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="title" aria-describedby="titleHelper" placeholder="Enter goods title" formControlName="Title" required>
+        <small id="titleHelper" class="form-text text-muted">Enter the new goods title</small>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="description">Description: </label>
+        <input type="text" class="form-control" id="description" aria-describedby="descriptionHelper" placeholder="Enter description" formControlName="Description">
+        <small id="descriptionHelper" class="form-text text-muted">Enter the description</small>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="price">Price (old price = {{currentGoods.oldPrice}}, actual price = {{currentGoods.actualPrice}}): </label>
+        <input type="text" class="form-control" id="price" aria-describedby="priceHelper" placeholder="Enter price" formControlName="NewPrice">
+        <small id="priceHelper" class="form-text text-muted">Enter the new goods price consisting of positive numbers with up to two decimal digits</small>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="category">Category: </label>
+        <select id="category" class="custom-select" formControlName="Category">
+          <option *ngFor="let item of goodsTypes" [ngValue]="item">{{item.title}}</option>
+        </select>
+      </div>
+      <button class="btn btn-primary pull-right" [disabled]="!goodsEditFormGroup.valid" type="submit">Submit</button>
+    </form>
+  </div>
 </ng-template>

@@ -4,6 +4,7 @@ import com.orderme.ordermebackend.model.dto.GoodsDto;
 import com.orderme.ordermebackend.model.dtomappers.GoodsMapper;
 import com.orderme.ordermebackend.model.entity.Goods;
 import com.orderme.ordermebackend.model.entity.GoodsType;
+import com.orderme.ordermebackend.model.entity.User;
 import com.orderme.ordermebackend.repository.GoodsRepository;
 import com.orderme.ordermebackend.repository.GoodsTypeRepository;
 import com.orderme.ordermebackend.service.GoodsService;
@@ -90,6 +91,11 @@ public class GoodsServiceImpl implements GoodsService {
         Optional<Goods> target = goodsRepository.findById(id);
         Goods goodsToPatch = target.orElseThrow(() -> new EntityNotFoundException("Couldn't find the goods entity to update with id: " + id));
         goodsMapper.updateGoodsFromDto(goodsDto, goodsToPatch);
+        if (goodsDto.getGoodsTypeId() != null) {
+            GoodsType goodsType = goodsTypeRepository.getOne(goodsDto.getGoodsTypeId());
+            goodsToPatch.setGoodsType(goodsType);
+        }
+
         return goodsRepository.save(goodsToPatch);
     }
 

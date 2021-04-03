@@ -14,6 +14,7 @@ import {AdminCreationComponent} from "./modules/admin/admin-creation/admin-creat
 import {AdminOrdersComponent} from "./modules/orders/admin-orders/admin-orders.component";
 import {CategoryCreateComponent} from "./modules/goods/category-create/category-create.component";
 import {GoodsCreateComponent} from "./modules/goods/goods-create/goods-create.component";
+import {CategoryEditComponent} from "./modules/goods/category-edit/category-edit.component";
 
 const routes: Routes = [
   {path: '', component: LandingPageComponent},
@@ -30,6 +31,7 @@ const routes: Routes = [
   {path: 'admin-orders', component: AdminOrdersComponent},
   {path: 'category-create', component: CategoryCreateComponent},
   {path: 'goods-create', component: GoodsCreateComponent},
+  {path: 'category-edit/:id', component: CategoryEditComponent},
   // {path: '/contact', component: LandingPageComponent},
   // {path: '/info', component: LandingPageComponent},
   // {path: '', component: LandingPageComponent},

@@ -40,7 +40,7 @@ public class Goods implements AbstractEntity<UUID> {
     private Set<OrderLine> orderLines;
 
     @ManyToOne
-    @JoinColumn(name = "goods_type", referencedColumnName = "goodsTypeId", nullable = false)
+    @JoinColumn(name = "goods_type", referencedColumnName = "goodsTypeId")
     private GoodsType goodsType;
 
     @OneToMany(mappedBy = "goods")

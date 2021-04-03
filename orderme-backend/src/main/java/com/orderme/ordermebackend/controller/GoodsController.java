@@ -18,6 +18,7 @@ import static com.orderme.ordermebackend.controller.utils.PathRoutes.PATH_GOODS;
 
 @RestController
 @RequestMapping(PATH_GOODS)
+@CrossOrigin
 public class GoodsController {
 
     private final GoodsService goodsService;

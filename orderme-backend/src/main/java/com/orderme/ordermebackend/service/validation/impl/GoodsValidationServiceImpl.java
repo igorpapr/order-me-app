@@ -41,17 +41,17 @@ public class GoodsValidationServiceImpl extends AbstractDtoValidationService<Goo
     }
 
     private void checkPrices(GoodsDto dto) {
-        if (dto.getActualPrice().equals(BigDecimal.ZERO) || dto.getOldPrice().equals(BigDecimal.ZERO)) {
-            throw new IllegalArgumentException("Price cannot be zero value");
+        if (dto.getActualPrice() != null) {
+            if (dto.getActualPrice().equals(BigDecimal.ZERO)) {
+                throw new IllegalArgumentException("New price cannot be zero value");
+            }
+        }
+        if (dto.getOldPrice() != null) {
+            if (dto.getOldPrice().equals(BigDecimal.ZERO)) {
+                throw new IllegalArgumentException("Old price cannot be zero value");
+            }
         }
     }
-
-//    @Override
-//    public void validateHasOwnId(GoodsDto dto) {
-//        if (dto.getGoodsId() == null) {
-//            failWithMissingId(GoodsDto.class);
-//        }
-//    }
 
     @Override
     protected void failWithMissingParameter(String field) {

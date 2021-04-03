@@ -56,10 +56,18 @@ export class GoodsTypeService {
    * @param goodsTypeToPatch - goodsTypeDto to send to the server
    * @param goodsTypeId - goods type id of which goods type to patch
    */
-  public patchGoodsType(goodsTypeToPatch: GoodsTypeDto, goodsTypeId: string) {
+  public patchGoodsType(goodsTypeToPatch: GoodsTypeDto, goodsTypeId: number) {
     console.log('Trying to patch goods with id ' + goodsTypeId + '. GoodsTypeToPatch: ' + goodsTypeToPatch);
     return this.http.patch<GoodsType>(this.GOODS_TYPES_URL + '/' + goodsTypeId, goodsTypeToPatch, this.httpOptions)
       .pipe(catchError(this.handleErrorsService.handleError<any>('patchGoodsType')));
   }
 
+  /**
+   * Delete goods type
+   * @param goodsTypeId - goods id of which goods to delete
+   */
+  public deleteGoodsType(goodsTypeId: number) {
+    console.log('Trying to delete goods type with id ' + goodsTypeId);
+    return this.http.delete<any>(this.GOODS_TYPES_URL + '/' + goodsTypeId, this.httpOptions);
+  }
 }
