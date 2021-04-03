@@ -6,6 +6,8 @@ import {Router} from "@angular/router";
 import {ToastsService} from "../../core/services/util/toasts.service";
 import {Page} from "../../core/model/page";
 import {WindowService} from "../../core/services/util/window.service";
+import {AuthenticationService} from "../../core/services/auth/authentication.service";
+import {UserRole} from "../../core/model/userRole";
 
 @Component({
   selector: 'app-all-goods',
@@ -29,11 +31,16 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
   //todo @INPUT as separate component
   // @ts-ignore
   currentShopId: number;
+  isAdministrator: boolean;
 
   constructor(private goodsService: GoodsService,
               private router: Router,
               private toastsService: ToastsService,
-              private windowService: WindowService) { }
+              private windowService: WindowService,
+              private authenticationService: AuthenticationService) {
+    this.isAdministrator = (authenticationService.currentUserValue.userRole === UserRole.ADMIN
+      || authenticationService.currentUserValue.userRole === UserRole.SUPER_ADMIN);
+  }
 
   ngOnInit(): void {
     this.fetchGoods();

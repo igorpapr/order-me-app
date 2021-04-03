@@ -12,6 +12,8 @@ import {AllGoodsComponent} from "./modules/goods/all-goods/all-goods.component";
 import {ProfileComponent} from "./modules/profile/profile/profile.component";
 import {AdminCreationComponent} from "./modules/admin/admin-creation/admin-creation.component";
 import {AdminOrdersComponent} from "./modules/orders/admin-orders/admin-orders.component";
+import {CategoryCreateComponent} from "./modules/goods/category-create/category-create.component";
+import {GoodsCreateComponent} from "./modules/goods/goods-create/goods-create.component";
 
 const routes: Routes = [
   {path: '', component: LandingPageComponent},
@@ -26,6 +28,8 @@ const routes: Routes = [
   {path: 'profile', component: ProfileComponent},
   {path: 'admin-create', component: AdminCreationComponent},
   {path: 'admin-orders', component: AdminOrdersComponent},
+  {path: 'category-create', component: CategoryCreateComponent},
+  {path: 'goods-create', component: GoodsCreateComponent},
   // {path: '/contact', component: LandingPageComponent},
   // {path: '/info', component: LandingPageComponent},
   // {path: '', component: LandingPageComponent},

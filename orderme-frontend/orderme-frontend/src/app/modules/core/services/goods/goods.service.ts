@@ -101,8 +101,7 @@ export class GoodsService {
    */
   public createGoods(goodsToCreate: GoodsDto) {
     console.log('Trying to create goods: ' + goodsToCreate);
-    return this.http.post<Goods>(this.GOODS_URL, goodsToCreate, this.httpOptions)
-      .pipe(catchError(this.handleErrorsService.handleError<any>('createGoods')));
+    return this.http.post<Goods>(this.GOODS_URL, goodsToCreate, this.httpOptions);
   }
 
   /**

@@ -1,9 +1,11 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {GoodsType} from "../../core/model/goods-type";
 import {Subscription} from "rxjs";
 import {GoodsTypeService} from "../../core/services/goods/goods-type.service";
 import {Router} from "@angular/router";
 import {ToastsService} from "../../core/services/util/toasts.service";
+import {AuthenticationService} from "../../core/services/auth/authentication.service";
+import {UserRole} from "../../core/model/userRole";
 
 @Component({
   selector: 'app-categories',
@@ -17,10 +19,14 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   goodsTypeSet: GoodsType[] = [];
   isLoading: boolean = false;
   isEmpty: boolean = false;
+  isAdministrator: boolean;
 
   constructor(private goodsTypeService: GoodsTypeService,
               private router: Router,
-              private toastsService: ToastsService) {
+              private toastsService: ToastsService,
+              private authenticationService: AuthenticationService) {
+    this.isAdministrator = (authenticationService.currentUserValue.userRole === UserRole.ADMIN
+      || authenticationService.currentUserValue.userRole === UserRole.SUPER_ADMIN);
   }
 
   ngOnInit(): void {

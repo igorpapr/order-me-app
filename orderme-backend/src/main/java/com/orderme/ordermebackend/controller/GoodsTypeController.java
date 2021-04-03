@@ -2,6 +2,7 @@ package com.orderme.ordermebackend.controller;
 
 import com.orderme.ordermebackend.controller.utils.PathRoutes;
 import com.orderme.ordermebackend.model.dto.GoodsTypeDto;
+import com.orderme.ordermebackend.model.entity.GoodsType;
 import com.orderme.ordermebackend.service.GoodsTypeService;
 import com.orderme.ordermebackend.service.validation.DtoValidationService;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class GoodsTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addNewGoods(@RequestBody GoodsTypeDto goodsTypeDto) {
+    public ResponseEntity<GoodsType> addNewGoods(@RequestBody GoodsTypeDto goodsTypeDto) {
         goodsTypeDtoValidationService.validateCreate(goodsTypeDto);
         return new ResponseEntity<>(goodsTypeService.create(goodsTypeDto), HttpStatus.CREATED);
     }

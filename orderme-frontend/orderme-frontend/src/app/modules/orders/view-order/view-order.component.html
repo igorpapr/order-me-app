@@ -15,7 +15,16 @@
       </p>
     </div>
     <div *ngIf="isStatusEditable() && currentOrder.orderStatus">
-      <button (click)="cancelOrder()" class="btn btn-danger">Cancel this order</button>
+      <div *ngIf="isCurrentUserIsAdminAndProcessing && isEditingStatus">
+          <label for="statuses">Order status:</label>
+          <select class="ml-2" #statuses id="statuses" (change)="setOrderStatusSelectorHolder(statuses.value)" >
+            <option *ngFor="let status of availableOrderStatuses" value="{{status}}">{{status}}
+          </select>
+          <button (click)="saveNewOrderStatus()" class="btn btn-success">Save status</button>
+          <button (click)="cancelStatusEditing()" class="btn btn-info">Cancel</button>
+      </div>
+      <button *ngIf="isCurrentUserIsAdminAndProcessing && !isEditingStatus" (click)="startEditingStatus()" class="btn btn-primary">Edit order status</button>
+      <button *ngIf="canBeCanceled()" (click)="cancelOrder()" class="btn btn-danger">Cancel this order</button>
     </div>
   </div>
   <hr>

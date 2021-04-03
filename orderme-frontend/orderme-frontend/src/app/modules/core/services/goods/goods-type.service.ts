@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../../../../environments/environment";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {HandleErrorsService} from "../util/handle-errors.service";
-import {BehaviorSubject, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {GoodsType} from "../../model/goods-type";
-import {catchError, first} from "rxjs/operators";
+import {catchError} from "rxjs/operators";
 import {GoodsTypeDto} from "../../model/dto/goodsTypeDto";
-import {Page} from "../../model/page";
 
 @Injectable({
   providedIn: 'root'
@@ -49,8 +48,7 @@ export class GoodsTypeService {
    */
   public createGoodsType(goodsTypeToCreate: GoodsTypeDto) {
     console.log('Trying to create goods: ' + goodsTypeToCreate);
-    return this.http.post<GoodsType>(this.GOODS_TYPES_URL, goodsTypeToCreate, this.httpOptions)
-      .pipe(catchError(this.handleErrorsService.handleError<any>('createGoodsType')));
+    return this.http.post<GoodsType>(this.GOODS_TYPES_URL, goodsTypeToCreate, this.httpOptions);
   }
 
   /**

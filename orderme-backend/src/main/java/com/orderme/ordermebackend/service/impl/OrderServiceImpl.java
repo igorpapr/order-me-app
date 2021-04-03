@@ -99,11 +99,11 @@ public class OrderServiceImpl implements OrderService {
             dto.setOrderId(orderId);
             orderToPatch.setOrderLines(saveOrderLinesFromOrderDto(dto, orderToPatch));
         }
-        User processingByRef = null;
         if (dto.getProcessingById() != null) {
-            processingByRef = userRepository.getOne(dto.getProcessingById());
+            User processingByRef = userRepository.getOne(dto.getProcessingById());
+            orderToPatch.setProcessingBy(processingByRef);
         }
-        orderToPatch.setProcessingBy(processingByRef);
+
         orderToPatch.setLastUpdateTime(LocalDateTime.now());
         Order resultingOrder = orderRepository.save(orderToPatch);
 

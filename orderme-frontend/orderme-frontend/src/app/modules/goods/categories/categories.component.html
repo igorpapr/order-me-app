@@ -2,13 +2,19 @@
   <div class="row">
     Search area to the right (MAYBE NEW COMPONENT)
   </div>
+  <div *ngIf="isAdministrator" class="row">
+    <div class="col text-right">
+      <button routerLink="/category-create" class="btn btn-info">Create category</button>
+    </div>
+  </div>
+  <hr>
   <div class="row">
-    <div *ngFor="let item of goodsTypeSet">
+    <div *ngFor="let item of goodsTypeSet" class="col-md-4">
       <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{{item.title}}</h5>
+        <h5 class="card-header">{{item.title}}</h5>
+        <div class="card-body">
             <p class="card-text">{{item.description}}</p>
-            <button (click)="navigate($event, item.goodsTypeId, item.title)" class="card-link">Show</button>
+            <button (click)="navigate($event, item.goodsTypeId, item.title)" class="btn btn-info float-right">Show goods</button>
           </div>
         </div>
       </div>

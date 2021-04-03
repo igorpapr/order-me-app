@@ -7,6 +7,12 @@
   <div class="row">
     Search area to the right (MAYBE NEW COMPONENT) + SELECT shopId (MAYBE NEW COMPONENT)
   </div>
+  <div *ngIf="isAdministrator" class="row">
+    <div class="col text-right">
+      <button routerLink="/goods-create" class="btn btn-info">Create goods</button>
+    </div>
+  </div>
+  <hr>
   <div class="row" *ngIf="paginationObject">
     <div class="col-md-4 card" *ngFor="let item of paginationObject.content">
         <div class="card-body">

@@ -10,6 +10,7 @@ import {OrderDto} from "../../core/model/dto/orderDto";
 import {OrderLineDto} from "../../core/model/dto/order-line-dto";
 import {OrderLine} from "../../core/model/order-line";
 import {AuthenticationService} from "../../core/services/auth/authentication.service";
+import {UserRole} from "../../core/model/userRole";
 
 @Component({
   selector: 'app-view-order',
@@ -26,6 +27,14 @@ export class ViewOrderComponent implements OnInit, OnDestroy {
   // @ts-ignore
   cachedOrderLinesBeforeSaving: OrderLine[];
   isEditModeEnabled: boolean = false;
+  // @ts-ignore
+  isCurrentUserIsAdminAndProcessing: boolean;
+  isEditingStatus: boolean = false;
+  // @ts-ignore
+  private cachedStatus: OrderStatus | undefined;
+  // @ts-ignore
+  orderStatusSelectorHolder: OrderStatus;
+  availableOrderStatuses: OrderStatus[] = [];
 
   constructor(private ordersService: OrderService,
               private activatedRoute: ActivatedRoute,
@@ -34,13 +43,13 @@ export class ViewOrderComponent implements OnInit, OnDestroy {
               private authenticationService: AuthenticationService) {
     this.isLoading = false;
     this.currentOrderId = this.activatedRoute.snapshot.params.id;
+
   }
 
   ngOnInit(): void {
     this.isLoading = true;
     this.fetchCurrentOrder();
-    this.isLoading = false;
-  }
+ }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
@@ -52,6 +61,11 @@ export class ViewOrderComponent implements OnInit, OnDestroy {
         .subscribe(
           data => {
             this.currentOrder = data;
+            this.isLoading = false;
+            this.isCurrentUserIsAdminAndProcessing =
+              this.currentOrder.processingBy &&
+              (this.authenticationService.currentUserValue.userRole === UserRole.ADMIN)
+              && (this.currentOrder.processingBy.userId === this.authenticationService.currentUserValue.userId);
           }, error => {
             console.error(error);
             this.toastsService.toastAddDanger('Something went wrong while fetching this order. ' +
@@ -129,6 +143,7 @@ export class ViewOrderComponent implements OnInit, OnDestroy {
     // @ts-ignore
     switch (OrderStatus[this.currentOrder.orderStatus]) {
       case OrderStatus.CANCELED:
+      case OrderStatus.COMPLETED:
         return false;
       default:
         return true;
@@ -150,5 +165,74 @@ export class ViewOrderComponent implements OnInit, OnDestroy {
             this.toastsService.toastAddDanger("Something went wrong during canceling this order. Please, contact administrator");
           }
         ));
+  }
+
+  startEditingStatus(): void {
+    this.isEditingStatus = true;
+    this.fillAvailableOrderStatuses();
+    if (this.availableOrderStatuses.length != 0) {
+      this.setOrderStatusSelectorHolder(this.availableOrderStatuses[0]);
+    }
+    this.cachedStatus = JSON.parse(JSON.stringify(this.currentOrder.orderStatus));
+  }
+
+  setOrderStatusSelectorHolder(value: any) {
+  // @ts-ignore
+  this.orderStatusSelectorHolder = this.ordersService.getOrderStatusKey(value);
+}
+
+  saveNewOrderStatus(): void {
+    let orderDto = new OrderDto();
+    // @ts-ignore
+    orderDto.orderStatus = this.orderStatusSelectorHolder;
+    this.subscription.add(
+      this.ordersService.patchOrder(orderDto, this.currentOrderId)
+        .subscribe(
+          data => {
+            this.currentOrder = data;
+            this.isEditingStatus = false;
+            this.cachedStatus = undefined;
+            this.toastsService.toastAddSuccess('The order status was successfully updated')
+          }, error => {
+            console.error(error);
+            this.toastsService.toastAddDanger("Something went wrong during updating this order. Please, contact administrator");
+          }
+        ));
+  }
+
+  cancelStatusEditing(): void {
+    this.isEditingStatus = false;
+    this.currentOrder.orderStatus = JSON.parse(JSON.stringify(this.cachedStatus));
+    this.cachedStatus = undefined;
+  }
+
+  fillAvailableOrderStatuses(): void {
+    if (this.currentOrder.orderStatus) {
+      // @ts-ignore
+      let statusValue = OrderStatus[this.currentOrder.orderStatus];
+      switch (statusValue) {
+        case OrderStatus.WAITING_FOR_PROCESSING:
+          this.availableOrderStatuses = [OrderStatus.PROCESSING, OrderStatus.COLLECTING, OrderStatus.READY, OrderStatus.COMPLETED, OrderStatus.CANCELED]
+          break;
+        case OrderStatus.PROCESSING:
+          this.availableOrderStatuses = [OrderStatus.COLLECTING, OrderStatus.READY, OrderStatus.COMPLETED, OrderStatus.CANCELED]
+          break;
+        case OrderStatus.COLLECTING:
+          this.availableOrderStatuses = [OrderStatus.READY, OrderStatus.COMPLETED, OrderStatus.CANCELED];
+          break;
+        case OrderStatus.READY:
+          this.availableOrderStatuses = [OrderStatus.COMPLETED, OrderStatus.CANCELED];
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  canBeCanceled() {
+    return this.isStatusEditable() && !this.isEditingStatus &&
+      (this.isCurrentUserIsAdminAndProcessing ||
+        this.authenticationService.currentUserValue.userId === this.currentOrder.createdBy.userId);
+
   }
 }

@@ -3,7 +3,7 @@ import {environment} from "../../../../../environments/environment";
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import jwt_decode from 'jwt-decode';
-import {catchError, map} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import {UserData} from "../../model/user-data";
 import {AuthenticationRequestDto} from "../../model/dto/authenticationRequestDto";
 import {RegistrationRequestDto} from "../../model/dto/registrationRequestDto";
