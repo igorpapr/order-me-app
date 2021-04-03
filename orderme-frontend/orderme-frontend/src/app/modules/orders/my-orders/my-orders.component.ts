@@ -8,6 +8,7 @@ import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 import {ToastsService} from "../../core/services/util/toasts.service";
 import {OrderStatus} from "../../core/model/order-status";
 import {DateService} from "../../core/services/util/date.service";
+import {WindowService} from "../../core/services/util/window.service";
 
 @Component({
   selector: 'app-my-orders',
@@ -32,7 +33,8 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   constructor(private orderService: OrderService,
               private authenticationService: AuthenticationService,
               private toastsService: ToastsService,
-              public dateService: DateService) {
+              public dateService: DateService,
+              private windowService: WindowService) {
     this.isLoading = false;
     this.isEmpty = false;
     this.currentPage = 1;
@@ -66,18 +68,7 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   changePage(event: number) {
     this.currentPage = event;
     this.fetchOrders();
-    this.scrollToTop();
-  }
-
-  scrollToTop() {
-    const scrollToTop = window.setInterval(() => {
-      const pos = window.pageYOffset;
-      if (pos > 0) {
-        window.scrollTo(0, pos - 40);
-      } else {
-        window.clearInterval(scrollToTop);
-      }
-    }, 16);
+    this.windowService.scrollToTop();
   }
 
   ngOnDestroy(): void {

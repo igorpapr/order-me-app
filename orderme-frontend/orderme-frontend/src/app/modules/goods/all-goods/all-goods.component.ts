@@ -5,6 +5,7 @@ import {GoodsService} from "../../core/services/goods/goods.service";
 import {Router} from "@angular/router";
 import {ToastsService} from "../../core/services/util/toasts.service";
 import {Page} from "../../core/model/page";
+import {WindowService} from "../../core/services/util/window.service";
 
 @Component({
   selector: 'app-all-goods',
@@ -22,7 +23,7 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
   // @ts-ignore
   paginationObject: Page<Goods>;
 
-  currentPageNumber: number = 0;
+  currentPageNumber: number = 1;
   readonly pageSize: number = 9;
 
   //todo @INPUT as separate component
@@ -31,7 +32,8 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
 
   constructor(private goodsService: GoodsService,
               private router: Router,
-              private toastsService: ToastsService) { }
+              private toastsService: ToastsService,
+              private windowService: WindowService) { }
 
   ngOnInit(): void {
     this.fetchGoods();
@@ -60,17 +62,8 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
   changePage(event: number) {
     this.currentPageNumber = event;
     this.fetchGoods();
-    this.scrollToTop();
+    this.windowService.scrollToTop();
   }
 
-  scrollToTop() {
-    const scrollToTop = window.setInterval(() => {
-      const pos = window.pageYOffset;
-      if (pos > 0) {
-        window.scrollTo(0, pos - 40);
-      } else {
-        window.clearInterval(scrollToTop);
-      }
-    }, 16);
-  }
+
 }

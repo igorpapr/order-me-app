@@ -34,31 +34,41 @@ export class OrderService {
    * @param createdBy
    * @param processingBy
    * @param status
+   * @param unprocessedOnly - this parameter is used when it's needed
+   *                               to fetch the unprocessed orders only.
+   *                               Important!: If the processingBy parameter is provided,
+   *                               this parameter is ignored.
+   *                               Default value = false
    */
   public getOrdersList(page: number,
                        size: number,
                        shopId: number | null,
                        createdBy: any,
                        processingBy: any,
-                       status: OrderStatus | null): Observable<Page<Order>> {
+                       status: OrderStatus | null | undefined,
+                       unprocessedOnly: boolean = false): Observable<Page<Order>> {
 
-    const requestParams: HttpParams = new HttpParams()
-      .set('page', String(page))
-      .set('size', String(size))
-      .set('sort', "creationTime,desc");
+    let requestParams: HttpParams = new HttpParams()
+      .append('page', String(page))
+      .append('size', String(size))
+      .append('sort', "creationTime,desc");
+
+    console.log(`Fetching orders: page: ${page}, size: ${size}, createdBy: ${createdBy}, processingBy: ${processingBy}, status: ${status}, shopId: ${shopId}, unprocessedOnly: ${unprocessedOnly}`)
 
     if (createdBy !== null) {
-      requestParams.set('createdBy', String(createdBy));
+      requestParams = requestParams.append('createdBy', String(createdBy));
     }
     if (processingBy !== null) {
-      requestParams.set('processingBy', String(processingBy));
+      requestParams = requestParams.append('processingBy', String(processingBy));
     }
-    if (status !== null) {
-      requestParams.set('status', String(status))
+    if (status !== undefined && status !== null) {
+      requestParams = requestParams.append('status', String(status))
     }
     if (shopId !== null) {
-      requestParams.set('shopId', String(shopId))
+      requestParams = requestParams.append('shopId', String(shopId))
     }
+    requestParams = requestParams.append('unprocessedOnly', String(unprocessedOnly))
+
     return this.http.get<Page<Order>>(this.ORDERS_URL, {
         headers: this.httpOptions.headers,
         params: requestParams})

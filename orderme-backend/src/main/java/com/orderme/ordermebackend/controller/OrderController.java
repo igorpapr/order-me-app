@@ -8,6 +8,7 @@ import com.orderme.ordermebackend.model.entity.Order;
 import com.orderme.ordermebackend.model.entity.OrderStatus;
 import com.orderme.ordermebackend.service.OrderService;
 import com.orderme.ordermebackend.service.validation.DtoValidationService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,19 +32,33 @@ public class OrderController {
     }
 
     //pageable - page, size https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#core.web
+
+    /**
+     * Get the page of orders by parameters and pageable
+     * @param shopId - shopId, not required
+     * @param createdBy - createdBy Id, not required
+     * @param processingBy - processingBy Id, not required
+     * @param status - order status, not required
+     * @param unprocessedOnly - This parameter is used to fetch only the unprocessed orders (where processingBy is null).
+     *                        Important! When the processingBy parameter is provided - this parameter is ignored.
+     *                        Default value = false
+     * @param pageable - page, size and sort can be specified, required
+     * @return page with orders
+     */
     @GetMapping
-    public ResponseEntity<?> getAllOrdersByPageable(@RequestParam(required = false) Integer shopId,
-                                                    @RequestParam(required = false) UUID createdBy,
-                                                    @RequestParam(required = false) UUID processingBy,
-                                                    @RequestParam(required = false) OrderStatus status,
-                                                    Pageable pageable) {
+    public ResponseEntity<Page<Order>> getAllOrdersByPageable(@RequestParam(required = false) Integer shopId,
+                                                              @RequestParam(required = false) UUID createdBy,
+                                                              @RequestParam(required = false) UUID processingBy,
+                                                              @RequestParam(required = false) OrderStatus status,
+                                                              @RequestParam(required = false, defaultValue = "false") Boolean unprocessedOnly,
+                                                              Pageable pageable) {
         OrderDto dto = OrderDto.builder()
                 .shopId(shopId)
                 .createdById(createdBy)
                 .processingById(processingBy)
                 .orderStatus(status)
                 .build();
-        return new ResponseEntity<>(orderService.getAllByParams(dto, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getAllByParams(dto, unprocessedOnly, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

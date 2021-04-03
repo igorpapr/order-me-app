@@ -7,5 +7,5 @@ public enum OrderStatus {
     COLLECTING,
     READY,
     CANCELED,
-    COMPLETED;
+    COMPLETED
 }

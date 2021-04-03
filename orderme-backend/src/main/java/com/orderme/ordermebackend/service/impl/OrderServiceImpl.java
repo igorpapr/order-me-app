@@ -15,8 +15,10 @@ import com.orderme.ordermebackend.repository.OrderRepository;
 import com.orderme.ordermebackend.repository.ShopRepository;
 import com.orderme.ordermebackend.repository.UserRepository;
 import com.orderme.ordermebackend.service.OrderService;
+import com.orderme.ordermebackend.utils.fieldnames.EntityFieldNames;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -123,8 +125,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Page<Order> getAllByParams(OrderDto params, Pageable pageable) {
-        Example<Order> example = fillOrderExampleWithFetchedParameters(params);
+    public Page<Order> getAllByParams(OrderDto params, boolean unprocessedOnly, Pageable pageable) {
+        Example<Order> example = fillOrderExampleWithFetchedParameters(params, unprocessedOnly);
         Page<Order> resPage = orderRepository.findAll(example, pageable);
         resPage.getContent().forEach(OrderServiceImpl::calculateAndSetFullPrice);
         return resPage;
@@ -134,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
         return saveOrderLinesFromOrderDto(orderDto, null);
     }
 
-    private Example<Order> fillOrderExampleWithFetchedParameters(OrderDto parameters) {
+    private Example<Order> fillOrderExampleWithFetchedParameters(OrderDto parameters, boolean unprocessedOnly) {
         Order orderToExample = new Order();
         if (parameters.getShopId() != null) {
             Shop shop = shopRepository.findById(parameters.getShopId())
@@ -152,11 +154,43 @@ public class OrderServiceImpl implements OrderService {
             User user = userRepository.findById(parameters.getProcessingById()).orElseThrow(
                     () -> new EntityNotFoundException("Administrator wasn't found with id: " + parameters.getProcessingById()));
             orderToExample.setProcessingBy(user);
+            System.out.println(parameters.getProcessingById().toString());
         }
         if (parameters.getOrderStatus() != null) {
             orderToExample.setOrderStatus(parameters.getOrderStatus());
         }
+        if (unprocessedOnly) {
+            // Gives a possibility to provide example for Spring Data Jpa with null processingBy value
+            ExampleMatcher includeNullProcessingBy = ExampleMatcher.matchingAll()
+                    .withIgnorePaths(getIgnoredNullFields(orderToExample))
+                    .withIncludeNullValues();
+            return Example.of(orderToExample, includeNullProcessingBy);
+        }
         return Example.of(orderToExample);
+    }
+
+    private String[] getIgnoredNullFields(Order orderToExample) {
+        Set<String> ignoredFieldsSet = new HashSet<>();
+        if (orderToExample.getShop() == null) {
+            ignoredFieldsSet.add(EntityFieldNames.ORDER.SHOP);
+        }
+        if (orderToExample.getCreatedBy() == null) {
+            ignoredFieldsSet.add(EntityFieldNames.ORDER.CREATED_BY);
+        }
+        if (orderToExample.getOrderStatus() == null) {
+            ignoredFieldsSet.add(EntityFieldNames.ORDER.ORDER_STATUS);
+        }
+        if (orderToExample.getOrderId() == null) {
+            ignoredFieldsSet.add(EntityFieldNames.ORDER.ORDER_ID);
+        }
+        if (orderToExample.getCreationTime() == null) {
+            ignoredFieldsSet.add(EntityFieldNames.ORDER.CREATION_TIME);
+        }
+        if (orderToExample.getLastUpdateTime() == null) {
+            ignoredFieldsSet.add(EntityFieldNames.ORDER.LAST_UPDATE_TIME);
+        }
+        String[] res = new String[ignoredFieldsSet.size()];
+        return ignoredFieldsSet.toArray(res);
     }
 
     private Set<OrderLine> saveOrderLinesFromOrderDto(OrderDto orderDto, Order preSavedOrder) {

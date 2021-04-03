@@ -11,6 +11,7 @@ import {ViewOrderComponent} from "./modules/orders/view-order/view-order.compone
 import {AllGoodsComponent} from "./modules/goods/all-goods/all-goods.component";
 import {ProfileComponent} from "./modules/profile/profile/profile.component";
 import {AdminCreationComponent} from "./modules/admin/admin-creation/admin-creation.component";
+import {AdminOrdersComponent} from "./modules/orders/admin-orders/admin-orders.component";
 
 const routes: Routes = [
   {path: '', component: LandingPageComponent},
@@ -24,6 +25,7 @@ const routes: Routes = [
   {path: 'orders/:id', component: ViewOrderComponent},
   {path: 'profile', component: ProfileComponent},
   {path: 'admin-create', component: AdminCreationComponent},
+  {path: 'admin-orders', component: AdminOrdersComponent},
   // {path: '/contact', component: LandingPageComponent},
   // {path: '/info', component: LandingPageComponent},
   // {path: '', component: LandingPageComponent},

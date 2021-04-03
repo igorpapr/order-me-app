@@ -9,6 +9,7 @@ import {DateService} from "../../core/services/util/date.service";
 import {OrderDto} from "../../core/model/dto/orderDto";
 import {OrderLineDto} from "../../core/model/dto/order-line-dto";
 import {OrderLine} from "../../core/model/order-line";
+import {AuthenticationService} from "../../core/services/auth/authentication.service";
 
 @Component({
   selector: 'app-view-order',
@@ -29,7 +30,8 @@ export class ViewOrderComponent implements OnInit, OnDestroy {
   constructor(private ordersService: OrderService,
               private activatedRoute: ActivatedRoute,
               private toastsService: ToastsService,
-              public dateService: DateService) {
+              public dateService: DateService,
+              private authenticationService: AuthenticationService) {
     this.isLoading = false;
     this.currentOrderId = this.activatedRoute.snapshot.params.id;
   }

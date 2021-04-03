@@ -1,10 +1,12 @@
 import {OrderStatus} from "./order-status";
 import {OrderLine} from "./order-line";
 import {Shop} from "./shop";
+import {User} from "./user";
 
 export class Order {
 
-  orderId: string | undefined;
+  // @ts-ignore
+  orderId: string;
 
   creationTime: Date | undefined;
 
@@ -13,9 +15,11 @@ export class Order {
   // @ts-ignore
   orderStatus: OrderStatus;
 
-  createdBy: string | undefined;
+  // @ts-ignore
+  createdBy: User;
 
-  processingBy: string | null | undefined;
+  // @ts-ignore
+  processingBy: User;
 
   // @ts-ignore
   orderLines: OrderLine[];
