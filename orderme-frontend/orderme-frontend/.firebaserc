@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "ordermeimagestorage": {
+      "hosting": {
+        "orderme-frontend": [
+          "ordermeimagestorage"
+        ]
+      }
+    }
+  }
+}

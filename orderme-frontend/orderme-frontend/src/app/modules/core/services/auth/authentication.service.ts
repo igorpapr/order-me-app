@@ -49,6 +49,10 @@ export class AuthenticationService {
     return this.currentUserDataSubject.value;
   }
 
+  public isAuthenticated(): boolean {
+    return !!this.currentUserDataSubject.value;
+  }
+
   /**
    * Authenticating user
    * @returns a UserData observable

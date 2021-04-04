@@ -20,8 +20,8 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
   /**
    * Adds current user's jwt to the headers of the outgoing request to backend api
-   * @param request
-   * @param next
+   * @param request HttpRequest
+   * @param next HttpHandler
    */
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const currentUser: UserData = this.authenticationService.currentUserValue;

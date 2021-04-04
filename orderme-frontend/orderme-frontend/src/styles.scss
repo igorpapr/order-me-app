@@ -2,3 +2,10 @@
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+
+.embed-responsive .card-img-top
+{
+  object-fit: cover;
+  padding:    0 !important;
+}
+

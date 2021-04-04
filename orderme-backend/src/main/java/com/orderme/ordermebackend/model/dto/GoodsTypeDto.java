@@ -9,12 +9,15 @@ public class GoodsTypeDto implements AbstractDto {
 
     private String description;
 
+    private String imageLink;
+
     public GoodsTypeDto() {
     }
 
-    public GoodsTypeDto(String title, String description) {
+    public GoodsTypeDto(String title, String description, String imageLink) {
         this.title = title;
         this.description = description;
+        this.imageLink = imageLink;
     }
 
     public String getTitle() {
@@ -31,5 +34,13 @@ public class GoodsTypeDto implements AbstractDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 }

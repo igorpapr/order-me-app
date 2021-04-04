@@ -3,7 +3,6 @@ package com.orderme.ordermebackend.config.security;
 import com.orderme.ordermebackend.controller.utils.PathRoutes;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -26,10 +25,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    private final ExceptionHandlerChainFilter exceptionHandlerChainFilter;
+
     public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter,
-                                 @Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService) {
+                                 @Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService, ExceptionHandlerChainFilter exceptionHandlerChainFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userDetailsService = userDetailsService;
+        this.exceptionHandlerChainFilter = exceptionHandlerChainFilter;
     }
 
     @Override
@@ -50,16 +52,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().cors().and()
-                .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+        http.csrf().disable().cors()
+                .and().exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
-                .authorizeRequests()
-                .antMatchers(PathRoutes.CHILD_PATH_ADMIN_REGISTER).hasAuthority("SUPER_ADMIN")
-                .antMatchers(PathRoutes.PATH_AUTH + PathRoutes.CHILD_PATH_AUTH).permitAll()
-                //.antMatchers("/swagger.html").permitAll()
-                .anyRequest().permitAll()//.authenticated()
+                    .authorizeRequests()
+                    .antMatchers(PathRoutes.CHILD_PATH_ADMIN_REGISTER).hasAuthority("SUPER_ADMIN")
+                    .antMatchers(PathRoutes.PATH_AUTH + PathRoutes.CHILD_PATH_AUTH).permitAll()
+                    //.antMatchers("/swagger.html").permitAll()
+                    .anyRequest().permitAll()//.authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
-                .and().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerChainFilter, JwtAuthenticationFilter.class);
     }
 
 //    @Override

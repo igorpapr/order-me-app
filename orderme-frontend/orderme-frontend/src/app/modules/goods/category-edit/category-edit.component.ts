@@ -2,12 +2,13 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ToastsService} from "../../core/services/util/toasts.service";
 import {GoodsTypeService} from "../../core/services/goods/goods-type.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {GoodsType} from "../../core/model/goods-type";
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {Goods} from "../../core/model/goods";
 import {GoodsTypeDto} from "../../core/model/dto/goodsTypeDto";
+import {FirebaseService} from "../../core/services/util/firebase.service";
+import {finalize} from "rxjs/operators";
 
 @Component({
   selector: 'app-category-edit',
@@ -25,6 +26,13 @@ export class CategoryEditComponent implements OnInit, OnDestroy {
   cachedGoodsType: GoodsType | undefined;
   faSpinner = faSpinner;
 
+
+  isUploadingPhoto: boolean = false;
+  // @ts-ignore
+  uploadPercent: Observable<number | undefined>;
+  // @ts-ignore
+  filePath: string | undefined;
+
   goodsTypeEditForm: FormGroup =  new FormGroup({
     Title: new FormControl('', [
       Validators.required,
@@ -38,7 +46,8 @@ export class CategoryEditComponent implements OnInit, OnDestroy {
   constructor(private toastsService: ToastsService,
               private goodsTypeService: GoodsTypeService,
               private activatedRoute: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private firebaseService: FirebaseService) {
     this.currentGoodsTypeId = activatedRoute.snapshot.params.id;
   }
 
@@ -71,12 +80,16 @@ export class CategoryEditComponent implements OnInit, OnDestroy {
     let goodsTypeDto = new GoodsTypeDto();
     goodsTypeDto.title = this.goodsTypeEditForm.get('Title')?.value;
     goodsTypeDto.description = this.goodsTypeEditForm.get('Description')?.value;
+    if (this.filePath) {
+      goodsTypeDto.imageLink = this.filePath;
+    }
     this.subscription.add(this.goodsTypeService.patchGoodsType(goodsTypeDto, this.currentGoodsTypeId).subscribe(
       data => {
         this.isLoading = false;
         this.currentGoodsType = data;
         this.toastsService.toastAddSuccess('The category was successfully edited');
         this.isEditModeEnabled = false;
+        window.location.reload();
       }, error => {
         console.error(error);
         this.toastsService.toastAddDanger('Something went wrong during category updating. Please, contact the administrator');
@@ -108,5 +121,24 @@ export class CategoryEditComponent implements OnInit, OnDestroy {
         this.toastsService.toastAddDanger('Something went wrong while deleting the category. Please, contact the administrator');
       }
     ))
+  }
+
+  uploadFile(event: any) {
+    const file = event.target.files[0];
+    this.filePath = undefined;
+    this.isUploadingPhoto = true;
+    const filePathToUpload = `categories/${this.currentGoodsTypeId}`;
+
+    let uploadTask = this.firebaseService
+      .uploadFile(file, filePathToUpload);
+
+    this.uploadPercent = uploadTask.percentageChanges();
+    uploadTask.snapshotChanges().pipe(
+      finalize(() => {
+        this.filePath = filePathToUpload
+        this.currentGoodsType.imageLink = undefined;
+        this.isUploadingPhoto = false;
+      })
+    ).subscribe()
   }
 }

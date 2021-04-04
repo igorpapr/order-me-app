@@ -9,4 +9,6 @@ export class GoodsType {
   // @ts-ignore
   description: string;
 
+  // @ts-ignore
+  imageLink: string | null | undefined;
 }

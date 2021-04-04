@@ -19,14 +19,17 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   goodsTypeSet: GoodsType[] = [];
   isLoading: boolean = false;
   isEmpty: boolean = false;
-  isAdministrator: boolean;
+  isAdministrator: boolean = false;
+  readonly noImagePath: string = './assets/img/no-image.jpg';
 
   constructor(private goodsTypeService: GoodsTypeService,
               private router: Router,
               private toastsService: ToastsService,
               private authenticationService: AuthenticationService) {
-    this.isAdministrator = (authenticationService.currentUserValue.userRole === UserRole.ADMIN
-      || authenticationService.currentUserValue.userRole === UserRole.SUPER_ADMIN);
+    if (authenticationService.isAuthenticated()){
+      this.isAdministrator = (authenticationService.currentUserValue.userRole === UserRole.ADMIN
+        || authenticationService.currentUserValue.userRole === UserRole.SUPER_ADMIN);
+    }
   }
 
   ngOnInit(): void {

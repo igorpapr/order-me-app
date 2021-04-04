@@ -28,6 +28,7 @@ export class AuthenticationGuard implements CanActivate {
 
   unavailable(): boolean {
     this.router.navigate(['/']);
+    //todo possibly 404 custom page here
     return false;
   }
 

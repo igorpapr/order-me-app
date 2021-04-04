@@ -22,6 +22,8 @@ public class GoodsType implements AbstractEntity<Integer> {
 
     private String description;
 
+    private String imageLink;
+
     @JsonIgnore
     @OneToMany(mappedBy = "goodsType", cascade = CascadeType.ALL)
     private Set<Goods> goods;
@@ -29,10 +31,11 @@ public class GoodsType implements AbstractEntity<Integer> {
     public GoodsType() {
     }
 
-    public GoodsType(Integer goodsTypeId, String title, String description, Set<Goods> goods) {
+    public GoodsType(Integer goodsTypeId, String title, String description, String imageLink, Set<Goods> goods) {
         this.goodsTypeId = goodsTypeId;
         this.title = title;
         this.description = description;
+        this.imageLink = imageLink;
         this.goods = goods;
     }
 
@@ -58,6 +61,14 @@ public class GoodsType implements AbstractEntity<Integer> {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
     public Set<Goods> getGoods() {

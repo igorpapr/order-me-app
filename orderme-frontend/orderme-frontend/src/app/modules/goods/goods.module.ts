@@ -13,6 +13,7 @@ import {NgBootstrapFormValidationModule} from "ng-bootstrap-form-validation";
 import { GoodsCreateComponent } from './goods-create/goods-create.component';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import { CategoryEditComponent } from './category-edit/category-edit.component';
+import {AngularFireStorageModule} from "@angular/fire/storage";
 
 
 
@@ -25,7 +26,8 @@ import { CategoryEditComponent } from './category-edit/category-edit.component';
     AppRoutingModule,
     ReactiveFormsModule,
     NgBootstrapFormValidationModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    AngularFireStorageModule
   ]
 })
 export class GoodsModule { }

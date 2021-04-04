@@ -3,15 +3,17 @@ import {GoodsService} from "../../core/services/goods/goods.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Goods} from "../../core/model/goods";
 import {ToastsService} from "../../core/services/util/toasts.service";
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {CartService} from "../../core/services/orders/cart.service";
 import {AuthenticationService} from "../../core/services/auth/authentication.service";
 import {UserRole} from "../../core/model/userRole";
 import {GoodsDto} from "../../core/model/dto/goodsDto";
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {GoodsType} from "../../core/model/goods-type";
 import {GoodsTypeService} from "../../core/services/goods/goods-type.service";
+import {finalize} from "rxjs/operators";
+import {FirebaseService} from "../../core/services/util/firebase.service";
 
 @Component({
   selector: 'app-view-goods',
@@ -37,6 +39,13 @@ export class ViewGoodsComponent implements OnInit, OnDestroy {
   cachedGoodsState: Goods | undefined;
 
   currentAmountToAddToCart: number;
+
+  isUploadingPhoto: boolean = false;
+
+  // @ts-ignore
+  uploadPercent: Observable<number | undefined>;
+  // @ts-ignore
+  filePath: string | undefined;
 
   // @ts-ignore
   goodsEditFormGroup: FormGroup = new FormGroup(
@@ -65,15 +74,18 @@ export class ViewGoodsComponent implements OnInit, OnDestroy {
               private router: Router,
               private cartService: CartService,
               private authenticationService: AuthenticationService,
-              private goodsTypesService: GoodsTypeService) {
+              private goodsTypesService: GoodsTypeService,
+              private firebaseService: FirebaseService) {
     this.currentGoodsId = this.activatedRoute.snapshot.params.id;
     this.isLoading = true;
     this.currentGoods = new Goods();
     //todo
     this.currentAmountToAddToCart = 1;
-    this.isAdministrator =
-      this.authenticationService.currentUserValue.userRole === UserRole.SUPER_ADMIN
-    || this.authenticationService.currentUserValue.userRole === UserRole.ADMIN;
+    if (authenticationService.isAuthenticated()) {
+      this.isAdministrator =
+        this.authenticationService.currentUserValue.userRole === UserRole.SUPER_ADMIN
+        || this.authenticationService.currentUserValue.userRole === UserRole.ADMIN;
+    }
   }
 
   ngOnInit(): void {
@@ -156,7 +168,9 @@ export class ViewGoodsComponent implements OnInit, OnDestroy {
     goodsDto.description = this.goodsEditFormGroup.get('Description')?.value;
     goodsDto.actualPrice = this.goodsEditFormGroup.get('NewPrice')?.value;
     goodsDto.goodsTypeId = this.goodsEditFormGroup.get('Category')?.value.goodsTypeId;
-
+    if (this.filePath) {
+      goodsDto.imageLink = this.filePath;
+    }
     this.subscription.add(this.goodsService.patchGoods(goodsDto, this.currentGoodsId).subscribe(
       data => {
         this.currentGoods = data;
@@ -176,5 +190,24 @@ export class ViewGoodsComponent implements OnInit, OnDestroy {
       NewPrice: this.currentGoods.actualPrice,
       Category: this.goodsTypes.find(value => value.goodsTypeId === this.currentGoods.goodsType?.goodsTypeId)
     });
+  }
+
+  uploadFile(event: any) {
+    const file = event.target.files[0];
+    const filePathToUpload = `goods/${this.currentGoodsId}`;
+    this.filePath = undefined;
+    this.isUploadingPhoto = true;
+    const task = this.firebaseService.uploadFile(file, filePathToUpload);
+
+    // observe percentage changes
+    this.uploadPercent = task.percentageChanges();
+    // get notified when the download URL is available
+    task.snapshotChanges().pipe(
+      finalize(() => {
+        this.filePath = filePathToUpload
+        this.currentGoods.imageLink = undefined;
+        this.isUploadingPhoto = false;
+      })
+    ).subscribe()
   }
 }

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {LandingPageComponent} from "./modules/main/landing-page/landing-page.component";
 import {CategoriesComponent} from "./modules/goods/categories/categories.component";
 import {MyOrdersComponent} from "./modules/orders/my-orders/my-orders.component";
@@ -15,11 +15,16 @@ import {AdminOrdersComponent} from "./modules/orders/admin-orders/admin-orders.c
 import {CategoryCreateComponent} from "./modules/goods/category-create/category-create.component";
 import {GoodsCreateComponent} from "./modules/goods/goods-create/goods-create.component";
 import {CategoryEditComponent} from "./modules/goods/category-edit/category-edit.component";
+import {AuthenticationGuard} from "./modules/core/utils/guards/authentication.guard";
+import {UserRole} from "./modules/core/model/userRole";
 
 const routes: Routes = [
   {path: '', component: LandingPageComponent},
   {path: 'categories', component: CategoriesComponent},
-  {path: 'my-orders', component: MyOrdersComponent},
+  {path: 'my-orders',
+    component: MyOrdersComponent,
+    canActivate: [AuthenticationGuard],
+    data: {roles: [UserRole.USER, UserRole.ADMIN, UserRole.SUPER_ADMIN]}},
   {path: 'sign-in', component:SigninComponent},
   {path: 'categories/:id', component: GoodsByCategoryComponent},
   {path: 'goods/:id', component: ViewGoodsComponent},
@@ -27,11 +32,26 @@ const routes: Routes = [
   {path: 'cart', component: CartComponent},
   {path: 'orders/:id', component: ViewOrderComponent},
   {path: 'profile', component: ProfileComponent},
-  {path: 'admin-create', component: AdminCreationComponent},
-  {path: 'admin-orders', component: AdminOrdersComponent},
-  {path: 'category-create', component: CategoryCreateComponent},
-  {path: 'goods-create', component: GoodsCreateComponent},
-  {path: 'category-edit/:id', component: CategoryEditComponent},
+  {path: 'admin-create',
+    component: AdminCreationComponent,
+    canActivate: [AuthenticationGuard],
+    data: {roles: [UserRole.SUPER_ADMIN]}},
+  {path: 'admin-orders',
+    component: AdminOrdersComponent,
+    canActivate: [AuthenticationGuard],
+    data: {roles: [UserRole.ADMIN, UserRole.SUPER_ADMIN]}},
+  {path: 'category-create',
+    component: CategoryCreateComponent,
+    canActivate: [AuthenticationGuard],
+    data: {roles: [UserRole.ADMIN, UserRole.SUPER_ADMIN]}},
+  {path: 'goods-create',
+    component: GoodsCreateComponent,
+    canActivate: [AuthenticationGuard],
+    data: {roles: [UserRole.ADMIN, UserRole.SUPER_ADMIN]}},
+  {path: 'category-edit/:id',
+    component: CategoryEditComponent,
+    canActivate: [AuthenticationGuard],
+    data: {roles: [UserRole.ADMIN, UserRole.SUPER_ADMIN]}},
   // {path: '/contact', component: LandingPageComponent},
   // {path: '/info', component: LandingPageComponent},
   // {path: '', component: LandingPageComponent},

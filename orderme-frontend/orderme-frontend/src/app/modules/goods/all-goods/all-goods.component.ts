@@ -31,15 +31,18 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
   //todo @INPUT as separate component
   // @ts-ignore
   currentShopId: number;
-  isAdministrator: boolean;
+  isAdministrator: boolean = false;
+  readonly noImagePath: string = './assets/img/no-image.jpg';
 
   constructor(private goodsService: GoodsService,
               private router: Router,
               private toastsService: ToastsService,
               private windowService: WindowService,
               private authenticationService: AuthenticationService) {
-    this.isAdministrator = (authenticationService.currentUserValue.userRole === UserRole.ADMIN
-      || authenticationService.currentUserValue.userRole === UserRole.SUPER_ADMIN);
+    if (authenticationService.isAuthenticated()) {
+      this.isAdministrator = (authenticationService.currentUserValue.userRole === UserRole.ADMIN
+        || authenticationService.currentUserValue.userRole === UserRole.SUPER_ADMIN);
+    }
   }
 
   ngOnInit(): void {

@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @PropertySource("classpath:application.properties")
+@Slf4j
 public class JwtUtils {
 
     //private static final String SECRET_KEY_PROP_NAME = "orderme.security.jwt.secret-key";
@@ -38,7 +40,13 @@ public class JwtUtils {
     }
 
     public static boolean validateToken(String token, UserDetails userDetails) {
-        String userName = extractUsername(token);
+        String userName;
+        try {
+            userName = extractUsername(token);
+        } catch (ExpiredJwtException ex) {
+            log.error(ex.getMessage());
+            throw ex;
+        }
         return (userName.equals(userDetails.getUsername() /*!isTokenExpired(token) && */));
     }
 
