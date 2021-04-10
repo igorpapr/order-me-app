@@ -17,6 +17,7 @@ import {GoodsCreateComponent} from "./modules/goods/goods-create/goods-create.co
 import {CategoryEditComponent} from "./modules/goods/category-edit/category-edit.component";
 import {AuthenticationGuard} from "./modules/core/utils/guards/authentication.guard";
 import {UserRole} from "./modules/core/model/userRole";
+import {GoodsAvailabilityConfigurationComponent} from "./modules/goods/goods-availability-configuration/goods-availability-configuration.component";
 
 const routes: Routes = [
   {path: '', component: LandingPageComponent},
@@ -28,6 +29,9 @@ const routes: Routes = [
   {path: 'sign-in', component:SigninComponent},
   {path: 'categories/:id', component: GoodsByCategoryComponent},
   {path: 'goods/:id', component: ViewGoodsComponent},
+  {path: 'goods/availabilities/:id', component: GoodsAvailabilityConfigurationComponent,
+    canActivate: [AuthenticationGuard],
+    data: {roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN]}},
   {path: 'goods', component: AllGoodsComponent},
   {path: 'cart', component: CartComponent},
   {path: 'orders/:id', component: ViewOrderComponent},

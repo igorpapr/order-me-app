@@ -53,7 +53,7 @@ public class GoodsAvailablityServiceImpl implements GoodsAvailabilityService {
             Shop shopRef = shopRepository.getOne(shopId);
             goodsAvailability = GoodsAvailability.builder()
                         .goodsAvailabilitiesId(id)
-                        .amount(dto.getAmount())
+                        .availabilityStatus(dto.getAvailabilityStatus())
                         .goods(goodsRef)
                         .shop(shopRef)
                         .build();

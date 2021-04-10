@@ -10,8 +10,8 @@ public class GoodsAvailabilityValidationServiceImpl extends AbstractDtoValidatio
     @Override
     public void validateCreate(GoodsAvailabilityDto dto) {
         if (dto != null) {
-            if (dto.getAmount() == null) {
-                failWithMissingParameter("amount");
+            if (dto.getAvailabilityStatus() == null) {
+                failWithMissingParameter("availabilityStatus");
             }
         } else {
             failWithEmptyDto(GoodsAvailabilityDto.class);
@@ -21,7 +21,7 @@ public class GoodsAvailabilityValidationServiceImpl extends AbstractDtoValidatio
     @Override
     public void validatePatch(GoodsAvailabilityDto dto) {
         if (dto != null) {
-            if (dto.getAmount() == null) {
+            if (dto.getAvailabilityStatus() == null) {
                 failWithMissingParameter("amount");
             }
         } else {

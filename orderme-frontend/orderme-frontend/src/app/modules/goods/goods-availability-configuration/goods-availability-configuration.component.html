@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row" *ngIf="currentGoods">
+    <div class="col">
+      Goods: {{currentGoods.title}}
+    </div>
+  </div>
+  <hr>
+  <div class="col" *ngIf="this.shops">
+    <div>
+      <label class="control-label" for="shop">Select shop: </label>
+      <select id="shop" class="custom-select" [(ngModel)]="selectedShop" (change)="setAvailabilitiesDataBySelectedShop()">
+        <option value="" disabled>Choose shop</option>
+        <option *ngFor="let item of shops" [ngValue]="item">{{item.title}}: {{item.address}}</option>
+      </select>
+    </div>
+    <div >
+      <div *ngIf="selectedAvailability === null">
+        Currently there is no availability data for this shop, please, add some
+      </div>
+      <div *ngIf="selectedAvailability">
+        Current availability: <strong>{{getAvailabilityValue(selectedAvailability.availabilityStatus)}}</strong>
+      </div>
+      <div>
+        <label class="control-label" for="status">New status: </label>
+        <select [disabled]="selectedShop === undefined" id="status" class="custom-select" [(ngModel)]="selectedStatus">
+          <option value="" disabled>Choose new status</option>
+          <option *ngFor="let item of statuses" [ngValue]="item">{{item}}</option>
+        </select>
+      </div>
+      <button *ngIf="selectedStatus && selectedShop" class="btn btn-primary float-right mt-2" (click)="saveAvailability()">Save</button>
+    </div>
+  </div>
+</div>

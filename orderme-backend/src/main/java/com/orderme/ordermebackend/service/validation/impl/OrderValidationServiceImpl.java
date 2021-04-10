@@ -87,7 +87,7 @@ public class OrderValidationServiceImpl extends AbstractDtoValidationService<Ord
 
                     GoodsAvailability goodsAvailability = goodsAvailabilityService.getByShopIdAndGoodsId(shopId,
                             goodsId);
-                    if (goodsAvailability.getAmount() == 0) {
+                    if (goodsAvailability.getAvailabilityStatus().equals(AvailabilityStatus.NOT_AVAILABLE)) {
                         throw new IllegalArgumentException(
                                 "The goods with id: " + goodsId +
                                         " is not available in the shop with id: " + shopId);

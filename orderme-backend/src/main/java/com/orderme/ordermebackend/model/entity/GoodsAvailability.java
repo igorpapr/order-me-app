@@ -25,18 +25,22 @@ public class GoodsAvailability implements AbstractEntity<GoodsAvailabilitiesKey>
     @MapsId("shopId")
     @JoinColumn(name = "shop", nullable = false)
     private Shop shop;
+//
+//    @Column(nullable = false)
+//    private int amount = 0;
 
-    @Column(nullable = false)
-    private int amount = 0;
+    @Enumerated(EnumType.STRING)
+    private AvailabilityStatus availabilityStatus;
 
     public GoodsAvailability() {
     }
 
-    public GoodsAvailability(GoodsAvailabilitiesKey goodsAvailabilitiesId, Goods goods, Shop shop, int amount) {
+    public GoodsAvailability(GoodsAvailabilitiesKey goodsAvailabilitiesId, Goods goods, Shop shop, AvailabilityStatus status) {
         this.goodsAvailabilitiesId = goodsAvailabilitiesId;
         this.goods = goods;
         this.shop = shop;
-        this.amount = amount;
+        this.availabilityStatus = status;
+//        this.amount = amount;
     }
 
     public GoodsAvailabilitiesKey getGoodsAvailabilitiesId() {
@@ -63,11 +67,19 @@ public class GoodsAvailability implements AbstractEntity<GoodsAvailabilitiesKey>
         this.shop = shop;
     }
 
-    public int getAmount() {
-        return amount;
+    public AvailabilityStatus getAvailabilityStatus() {
+        return availabilityStatus;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setAvailabilityStatus(AvailabilityStatus availabilityStatus) {
+        this.availabilityStatus = availabilityStatus;
     }
+
+    //    public int getAmount() {
+//        return amount;
+//    }
+//
+//    public void setAmount(int amount) {
+//        this.amount = amount;
+//    }
 }

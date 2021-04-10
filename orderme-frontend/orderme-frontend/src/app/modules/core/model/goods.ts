@@ -18,5 +18,6 @@ export class Goods {
 
   goodsType: GoodsType | null | undefined;
 
-  goodsAvailabilities: Set<GoodsAvailability> | undefined;
+  // @ts-ignore
+  goodsAvailabilities: Set<GoodsAvailability>;
 }

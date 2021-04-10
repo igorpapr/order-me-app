@@ -1,9 +1,18 @@
+import {AvailabilityStatus} from "./availability-status";
+
+export class GoodsAvailabilityIdKey {
+  // @ts-ignore
+  goodsId: string;
+  // @ts-ignore
+  shopId: number;
+}
+
 export class GoodsAvailability {
 
-  shopId: string | undefined
+  // @ts-ignore
+  goodsAvailabilitiesId: GoodsAvailabilityIdKey;
 
-  goodsId: string | undefined
-
-  amount: number | undefined
+  // @ts-ignore
+  availabilityStatus: AvailabilityStatus
 
 }

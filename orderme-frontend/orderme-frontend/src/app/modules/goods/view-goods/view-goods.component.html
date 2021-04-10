@@ -3,6 +3,7 @@
     <div class="row">
       <div *ngIf="isAdministrator" class="col">
         <button (click)="startEditing()" class="btn btn-info">Edit</button>
+        <button routerLink="/goods/availabilities/{{currentGoodsId}}" class="btn btn-info">Edit availabilities</button>
         <button (click)="deleteCurrentGoods()" class="btn btn-danger">Delete</button>
       </div>
     </div>
@@ -42,12 +43,15 @@
         </h4>
       </div>
     </div>
-    <div *ngIf="currentShopId" class="row">
+    <div *ngIf="currentShopId && currentGoods" class="row">
       <div class="col-12">
-        <h3 *ngFor="let item of currentGoods.goodsAvailabilities">
-          {{item.amount}}
-        </h3>
+        <p>Availability:
+          {{getCurrentGoodsAvailabilityByShop()}}
+        </p>
       </div>
+    </div>
+    <div *ngIf="!currentShopId">
+      <p><small>Please, choose the shop to show goods' availability</small></p>
     </div>
     <div>
       GET AMOUNT HERE
@@ -57,13 +61,19 @@
         CURRENT AMOUNT HERE (now = 1)
       </div>
       <div class="row">
-        <button class="btn btn-primary" (click)="addToCart($event, linkToCartTpl)">
-          Add to cart
-        </button>
+        <div class="col" [ngbPopover]="popoverContent" triggers="mouseenter:mouseleave" placement="right" popoverTitle="Availability" >
+          <button class="btn btn-primary" [disabled]="!canActivateButton" (click)="addToCart($event, linkToCartTpl)">
+            Add to cart
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #popoverContent>
+  The goods is {{this.canActivateButton ?"available":"not available"}} in the selected shop
+</ng-template>
 
 <ng-template #linkToCartTpl>
   Successfully added {{this.currentGoods.title}} to your <a routerLink="/cart">cart</a>.

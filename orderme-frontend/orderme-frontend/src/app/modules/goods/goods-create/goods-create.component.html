@@ -29,7 +29,15 @@
           <option *ngFor="let item of goodsTypes" [ngValue]="item">{{item.title}}</option>
         </select>
       </div>
-      <button class="btn btn-primary pull-right" [disabled]="!goodsCreationFormGroup.valid" type="submit">Submit</button>
+      <ngb-alert type="info" [dismissible]="false">
+        <p>
+          The future created goods will have "Not available" status by default.
+        </p>
+        <p>
+          Please, configure goods availability in the goods editing menu after the creation.
+        </p>
+      </ngb-alert>
+      <button class="btn btn-primary float-right" [disabled]="!goodsCreationFormGroup.valid" type="submit">Submit</button>
     </form>
   </div>
 </div>

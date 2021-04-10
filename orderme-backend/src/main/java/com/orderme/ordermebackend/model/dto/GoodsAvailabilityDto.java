@@ -1,21 +1,19 @@
 package com.orderme.ordermebackend.model.dto;
 
+import com.orderme.ordermebackend.model.entity.AvailabilityStatus;
+
 public class GoodsAvailabilityDto implements AbstractDto {
 
-    private Integer amount;
+    private AvailabilityStatus availabilityStatus;
 
     public GoodsAvailabilityDto() {
     }
 
-    public GoodsAvailabilityDto(Integer amount) {
-        this.amount = amount;
+    public AvailabilityStatus getAvailabilityStatus() {
+        return availabilityStatus;
     }
 
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public void setAvailabilityStatus(AvailabilityStatus availabilityStatus) {
+        this.availabilityStatus = availabilityStatus;
     }
 }

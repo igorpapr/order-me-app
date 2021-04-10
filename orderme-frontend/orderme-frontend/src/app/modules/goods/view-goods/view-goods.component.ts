@@ -14,6 +14,7 @@ import {GoodsType} from "../../core/model/goods-type";
 import {GoodsTypeService} from "../../core/services/goods/goods-type.service";
 import {finalize} from "rxjs/operators";
 import {FirebaseService} from "../../core/services/util/firebase.service";
+import {AvailabilityStatus} from "../../core/model/availability-status";
 
 @Component({
   selector: 'app-view-goods',
@@ -27,7 +28,7 @@ export class ViewGoodsComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   //TODO!!!
   // @ts-ignore
-  currentShopId: number;
+  currentShopId: number = 5;
   // @ts-ignore
   currentGoods: Goods;
   isAdministrator: boolean = false;
@@ -39,6 +40,8 @@ export class ViewGoodsComponent implements OnInit, OnDestroy {
   cachedGoodsState: Goods | undefined;
 
   currentAmountToAddToCart: number;
+
+  canActivateButton: boolean = false;
 
   isUploadingPhoto: boolean = false;
 
@@ -92,12 +95,30 @@ export class ViewGoodsComponent implements OnInit, OnDestroy {
     this.fetchGoodsData();
   }
 
+  private setCanActivateButton() {
+    if (this.currentGoods.goodsAvailabilities && this.currentShopId) {
+      for (let item of this.currentGoods.goodsAvailabilities) {
+        if (item.goodsAvailabilitiesId.shopId === this.currentShopId) {
+          if (item.availabilityStatus) {
+            this.canActivateButton = !(this.goodsService.getAvailabilityStatus(item.availabilityStatus)
+              === AvailabilityStatus.NOT_AVAILABLE);
+          } else {
+            this.canActivateButton = false;
+          }
+        }
+      }
+    }
+  }
+
   fetchGoodsData(): void {
     this.isLoading = true;
     this.subscription.add(
       this.goodsService.getGoodsByIdAndShopId(this.currentShopId, this.currentGoodsId)
         .subscribe(data => {
           this.currentGoods = data;
+            if (this.currentShopId) {
+            this.setCanActivateButton();
+          }
         },
           error => {
           console.error(error);
@@ -209,5 +230,9 @@ export class ViewGoodsComponent implements OnInit, OnDestroy {
         this.isUploadingPhoto = false;
       })
     ).subscribe()
+  }
+
+  getCurrentGoodsAvailabilityByShop() {
+    return this.goodsService.getGoodsAvailabilityByShop(this.currentGoods, this.currentShopId);
   }
 }

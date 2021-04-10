@@ -8,20 +8,29 @@
     Search area to the right (MAYBE NEW COMPONENT) + SELECT shopId
   </div>
   <div class="row">
-    <div *ngFor="let item of goodsList">
+    <div *ngFor="let item of goodsList" class="col-md-3 mt-4">
       <div class="card">
         <div class="card-body">
+          <div class="embed-responsive embed-responsive-4by3">
+            <img class="img-thumbnail card-img-top  embed-responsive-item"
+                 [src]="!(item.imageLink) ? this.noImagePath : (item.imageLink | getDownloadURL)" alt="Current photo"/>
+          </div>
           <h5 class="card-title">{{item.title}}</h5>
           <p class="card-text">{{item.description}}</p>
           <p class="card-text">{{item.oldPrice}}</p>
           <p class="card-text">{{item.actualPrice}}</p>
-          <p *ngIf="this.shopId" class="card-text">{{item.goodsAvailabilities}}</p>
-          <button routerLink="/goods/{{item.goodsId}}" class="card-link">Show</button>
+          <p *ngIf="this.shopId && item.goodsAvailabilities?.size !== 0" class="card-text">
+            Stock: {{getGoodsAvailability(item)}}
+          </p>
+          <p *ngIf="!this.shopId" class="card-text">
+            <small>Please, pick the shop to see availability</small>
+          </p>
+          <button routerLink="/goods/{{item.goodsId}}" class="btn btn-info float-right">Show</button>
         </div>
       </div>
     </div>
   </div>
-  <div *ngIf="paginationObject" class="row">
+  <div *ngIf="paginationObject" class="row w-100 mt-2 justify-content-center">
     <ngb-pagination [collectionSize]="paginationObject ? paginationObject.totalElements : 0" [pageSize]="pageSize" [(page)]="currentPage" [maxSize]="5" (pageChange)="changePage($event)"></ngb-pagination>
   </div>
 </div>

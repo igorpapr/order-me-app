@@ -30,6 +30,7 @@ export class GoodsByCategoryComponent implements OnInit, OnDestroy {
   public state = '';
   // @ts-ignore
   paginationObject: Page<Goods>;
+  readonly noImagePath: string = './assets/img/no-image.jpg';
 
   constructor(private goodsService: GoodsService,
               private activatedRoute: ActivatedRoute,
@@ -100,5 +101,9 @@ export class GoodsByCategoryComponent implements OnInit, OnDestroy {
         window.clearInterval(scrollToTop);
       }
     }, 16);
+  }
+
+  getGoodsAvailability(item: Goods) {
+    this.goodsService.getGoodsAvailabilityByShop(item, this.shopId);
   }
 }

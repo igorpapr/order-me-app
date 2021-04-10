@@ -14,22 +14,31 @@
   </div>
   <hr>
   <div class="row" *ngIf="paginationObject">
-    <div class="col-md-4 card" *ngFor="let item of paginationObject.content">
+    <div class="col-md-3 mt-4" *ngFor="let item of paginationObject.content">
+      <div class="card">
         <div class="card-body">
           <div class="embed-responsive embed-responsive-4by3">
-            <img class="img-thumbnail card-img-top  embed-responsive-item" [src]="!(item.imageLink) ? this.noImagePath : (item.imageLink | getDownloadURL)"  alt="Current photo"/>
+            <img class="img-thumbnail card-img-top  embed-responsive-item"
+                 [src]="!(item.imageLink) ? this.noImagePath : (item.imageLink | getDownloadURL)" alt="Current photo"/>
           </div>
           <h5 class="card-title">{{item.title}}</h5>
           <p class="card-text">{{item.description}}</p>
           <p class="card-text">{{item.oldPrice}}</p>
           <p class="card-text">{{item.actualPrice}}</p>
-<!--       todo shopId - ? with availabilities, else - not available  -->
-          <p *ngIf="this.currentShopId" class="card-text">{{item.goodsAvailabilities}}</p>
+          <!--       todo shopId - ? with availabilities, else - not available  -->
+          <p *ngIf="this.currentShopId && item.goodsAvailabilities?.size !== 0" class="card-text">
+            Stock: {{getGoodsAvailability(item)}}
+          </p>
+          <p *ngIf="!this.currentShopId" class="card-text">
+            <small>Please, pick the shop to see availability</small>
+          </p>
           <button routerLink="/goods/{{item.goodsId}}" class="btn btn-info">Show</button>
         </div>
+      </div>
     </div>
   </div>
-  <div *ngIf="paginationObject" class="row">
-    <ngb-pagination [collectionSize]="paginationObject ? paginationObject.totalElements : 0" [pageSize]="pageSize" [(page)]="currentPageNumber" [maxSize]="5" (pageChange)="changePage($event)"></ngb-pagination>
+  <div *ngIf="paginationObject" class="row w-100 mt-2 justify-content-center">
+    <ngb-pagination [collectionSize]="paginationObject ? paginationObject.totalElements : 0" [pageSize]="pageSize"
+                    [(page)]="currentPageNumber" [maxSize]="5" (pageChange)="changePage($event)"></ngb-pagination>
   </div>
 </div>

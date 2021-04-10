@@ -30,7 +30,7 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
 
   //todo @INPUT as separate component
   // @ts-ignore
-  currentShopId: number;
+  currentShopId: number = 4;
   isAdministrator: boolean = false;
   readonly noImagePath: string = './assets/img/no-image.jpg';
 
@@ -75,5 +75,8 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
     this.windowService.scrollToTop();
   }
 
+  getGoodsAvailability(goods: Goods) {
+    return this.goodsService.getGoodsAvailabilityByShop(goods, this.currentShopId);
+  }
 
 }

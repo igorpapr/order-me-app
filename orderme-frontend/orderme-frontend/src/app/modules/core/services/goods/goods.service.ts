@@ -7,6 +7,7 @@ import {catchError} from "rxjs/operators";
 import {Goods} from "../../model/goods";
 import {Page} from "../../model/page";
 import {GoodsDto} from "../../model/dto/goodsDto";
+import {AvailabilityStatus} from "../../model/availability-status";
 
 @Injectable({
   providedIn: 'root'
@@ -123,4 +124,21 @@ export class GoodsService {
     console.log('Trying to delete goods with id ' + goodsId);
     return this.http.delete<any>(this.GOODS_URL + '/' + goodsId, this.httpOptions);
   }
+
+  public getGoodsAvailabilityByShop(goods: Goods, shopId: number) {
+    if (goods.goodsAvailabilities) {
+      for (let item of goods.goodsAvailabilities) {
+        if (item.goodsAvailabilitiesId.shopId === shopId) {
+          return item.availabilityStatus ? this.getAvailabilityStatus(item.availabilityStatus) : AvailabilityStatus.NOT_AVAILABLE;
+        }
+      }
+    }
+    return AvailabilityStatus.NOT_AVAILABLE;
+  }
+
+  public getAvailabilityStatus(status: AvailabilityStatus) {
+    // @ts-ignore
+    return AvailabilityStatus[status.toString()];
+  }
+
 }
