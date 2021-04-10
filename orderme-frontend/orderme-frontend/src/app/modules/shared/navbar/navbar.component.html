@@ -15,7 +15,7 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/goods">Goods</a>
       </li>
-      <li *ngIf="!(isAdmin || isSuperAdmin)" class="nav-item">
+      <li *ngIf="!(isAdmin || isSuperAdmin) && isSignedIn" class="nav-item">
         <a class="nav-link" routerLink="/my-orders">My orders</a>
       </li>
       <li *ngIf="isAdmin || isSuperAdmin" class="nav-item">

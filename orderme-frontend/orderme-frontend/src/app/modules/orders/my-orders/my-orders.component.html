@@ -4,9 +4,9 @@
       Your orders
     </h2>
   </div>
-  <div class="row">
-    Filtration + maybe sorting + SELECT shopId
-  </div>
+<!--  <div class="row">-->
+<!--    Filtration + maybe sorting + SELECT shopId-->
+<!--  </div>-->
   <div class="row">
       <div *ngFor="let item of ordersList" class="card w-100">
         <a class="deco-none" routerLink="/orders/{{item.orderId}}">
@@ -25,7 +25,7 @@
         </a>
       </div>
   </div>
-  <div *ngIf="paginationObject" class="row mt-2">
-    <ngb-pagination class="w-100" [collectionSize]="paginationObject ? paginationObject.totalElements : 0" [pageSize]="pageSize" [(page)]="currentPage" [maxSize]="5" (pageChange)="changePage($event)"></ngb-pagination>
+  <div *ngIf="paginationObject" class="row w-100 mt-2 justify-content-center">
+    <ngb-pagination [collectionSize]="paginationObject ? paginationObject.totalElements : 0" [pageSize]="pageSize" [(page)]="currentPage" [maxSize]="5" (pageChange)="changePage($event)"></ngb-pagination>
   </div>
 </div>

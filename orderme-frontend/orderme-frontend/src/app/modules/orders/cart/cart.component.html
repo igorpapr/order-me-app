@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <h1 class="col">CART</h1>
+    <h1 class="col">Your Cart</h1>
   </div>
   <hr>
   <div *ngIf="cartListObservable">
@@ -9,13 +9,14 @@
       <div class="col">${{item.goods.actualPrice}}</div>
       <div class="col">{{item.amount}}</div>
       <div class="col">
-        <button (click)="removeItem(item.goods.goodsId)">
+        <button class="btn btn-danger border" (click)="removeItem(item.goods.goodsId)">
           X
         </button>
       </div>
     </div>
   </div>
-  <div class="row">
+  <hr>
+  <div class="row mt-3 float-right">
     <button (click)="checkout($event)" class="btn btn-primary">
       Checkout
     </button>

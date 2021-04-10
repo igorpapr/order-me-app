@@ -1,7 +1,4 @@
 <div class="container">
-  <div class="row">
-    Search area to the right (MAYBE NEW COMPONENT)
-  </div>
   <div *ngIf="isAdministrator" class="row">
     <div class="col text-right">
       <button routerLink="/category-create" class="btn btn-info">Create category</button>
@@ -9,18 +6,26 @@
   </div>
   <hr>
   <div class="row">
-    <div *ngFor="let item of goodsTypeSet" class="col-md-4">
+    <div *ngFor="let item of goodsTypeSet" class="col-md-4 mt-4">
       <div class="card">
         <h5 class="card-header">{{item.title}}</h5>
         <div class="card-body">
-            <div class="embed-responsive embed-responsive-4by3">
-              <img class="img-thumbnail card-img-top  embed-responsive-item" [src]="!(item.imageLink) ? this.noImagePath : (item.imageLink | getDownloadURL)"  alt="Current photo"/>
-            </div>
-            <p class="card-text">{{item.description}}</p>
-            <button *ngIf="isAdministrator" routerLink="/category-edit/{{item.goodsTypeId}}" class="btn btn-primary">Edit</button>
-            <button (click)="navigate($event, item.goodsTypeId, item.title)" class="btn btn-info float-right">Show goods</button>
+          <div class="embed-responsive embed-responsive-4by3">
+            <img class="img-thumbnail card-img-top  embed-responsive-item"
+                 [src]="!(item.imageLink) ? this.noImagePath : (item.imageLink | getDownloadURL)" alt="Current photo"/>
           </div>
+          <p class="card-text">{{item.description}}</p>
+          <button *ngIf="isAdministrator" routerLink="/category-edit/{{item.goodsTypeId}}" class="btn btn-primary">
+            Edit
+          </button>
+          <button (click)="navigate($event, item.goodsTypeId, item.title)" class="btn btn-info float-right">Show goods
+          </button>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+<!--<div class="row">-->
+<!--  Search area to the right (MAYBE NEW COMPONENT)-->
+<!--</div>-->

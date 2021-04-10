@@ -28,7 +28,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     private final ExceptionHandlerChainFilter exceptionHandlerChainFilter;
 
     public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter,
-                                 @Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService, ExceptionHandlerChainFilter exceptionHandlerChainFilter) {
+                                 @Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService,
+                                 ExceptionHandlerChainFilter exceptionHandlerChainFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userDetailsService = userDetailsService;
         this.exceptionHandlerChainFilter = exceptionHandlerChainFilter;
@@ -38,17 +39,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
     }
-
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .antMatchers("/admin").hasAnyAuthority("USER")
-//                .antMatchers("/swagger.html").permitAll()
-//                .antMatchers("/*").permitAll()
-//                .and()
-//      //          .csrf().disable()
-//                .formLogin(); //TODO ????????
-//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

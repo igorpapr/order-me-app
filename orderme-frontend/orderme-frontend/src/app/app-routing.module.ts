@@ -52,9 +52,6 @@ const routes: Routes = [
     component: CategoryEditComponent,
     canActivate: [AuthenticationGuard],
     data: {roles: [UserRole.ADMIN, UserRole.SUPER_ADMIN]}},
-  // {path: '/contact', component: LandingPageComponent},
-  // {path: '/info', component: LandingPageComponent},
-  // {path: '', component: LandingPageComponent},
   {path: '**', redirectTo: ''}
 ];
 
@@ -63,3 +60,9 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+
+
+// {path: '/contact', component: LandingPageComponent},
+// {path: '/info', component: LandingPageComponent},
+// {path: '', component: LandingPageComponent},

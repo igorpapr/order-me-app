@@ -21,9 +21,7 @@ export class GoodsTypeService {
   };
 
   constructor(private http: HttpClient,
-              private handleErrorsService: HandleErrorsService) {
-    // @ts-ignore
-  }
+              private handleErrorsService: HandleErrorsService) {}
 
   /**
    * Get a list of goods types

@@ -39,7 +39,7 @@
           <input type="password" name="password" class="form-control rounded"
                  placeholder="Confirm password" [(ngModel)]="confirmPassword"/>
         </div>
-        <button type="submit" [disabled]="isLoading" class="btn buttonpr border-0 btn-lg" (click)="registerUser()">
+        <button type="submit" [disabled]="isLoading" class="btn btn-info border-0 btn-lg float-right" (click)="registerUser()">
           <span *ngIf="!isLoading" class="text">Sign up</span>
           <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           <span *ngIf="isLoading" class="sr-only">Loading...</span>

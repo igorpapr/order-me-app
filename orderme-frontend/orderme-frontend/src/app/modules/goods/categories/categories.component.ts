@@ -15,7 +15,6 @@ import {UserRole} from "../../core/model/userRole";
 export class CategoriesComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription = new Subscription();
-
   goodsTypeSet: GoodsType[] = [];
   isLoading: boolean = false;
   isEmpty: boolean = false;
