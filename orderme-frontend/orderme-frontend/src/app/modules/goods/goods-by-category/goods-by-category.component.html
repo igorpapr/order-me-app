@@ -4,8 +4,11 @@
       {{state}}
     </h2>
   </div>
-  <div class="row">
-    Search area to the right (MAYBE NEW COMPONENT) + SELECT shopId
+  <div *ngIf="isEmpty">
+    The list is empty
+    <button routerLink="/categories" class="btn btn-primary">
+      Back
+    </button>
   </div>
   <div class="row">
     <div *ngFor="let item of goodsList" class="col-md-3 mt-4">
@@ -17,12 +20,16 @@
           </div>
           <h5 class="card-title">{{item.title}}</h5>
           <p class="card-text">{{item.description}}</p>
-          <p class="card-text">{{item.oldPrice}}</p>
-          <p class="card-text">{{item.actualPrice}}</p>
-          <p *ngIf="this.shopId && item.goodsAvailabilities?.size !== 0" class="card-text">
+          <p class="card-text" *ngIf="item.oldPrice && item.oldPrice !== item.actualPrice"><strong>Old price: </strong>
+            <span style="text-decoration: line-through;">
+              ${{item.oldPrice}}
+            </span>
+          </p>
+          <p class="card-text"><strong>Actual price: </strong>${{item.actualPrice}}</p>
+          <p *ngIf="(this.currentShop | async) && item.goodsAvailabilities?.size !== 0" class="card-text">
             Stock: {{getGoodsAvailability(item)}}
           </p>
-          <p *ngIf="!this.shopId" class="card-text">
+          <p *ngIf="!(this.currentShop | async)" class="card-text">
             <small>Please, pick the shop to see availability</small>
           </p>
           <button routerLink="/goods/{{item.goodsId}}" class="btn btn-info float-right">Show</button>
@@ -30,7 +37,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="paginationObject" class="row w-100 mt-2 justify-content-center">
+  <div *ngIf="paginationObject && !isEmpty" class="row w-100 mt-2 justify-content-center">
     <ngb-pagination [collectionSize]="paginationObject ? paginationObject.totalElements : 0" [pageSize]="pageSize" [(page)]="currentPage" [maxSize]="5" (pageChange)="changePage($event)"></ngb-pagination>
   </div>
 </div>

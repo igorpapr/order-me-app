@@ -27,17 +27,16 @@
     </div>
   </div>
   <div class="row">
-    <button *ngIf="!isEditModeEnabled" (click)="startEdit()" class="btn btn-info">
-      Edit
-    </button>
-    <button *ngIf="isEditModeEnabled" (click)="cancelEditing()" class="btn btn-warning">
-      Cancel
-    </button>
-    <button *ngIf="isEditModeEnabled" (click)="saveUserData()" class="btn btn-success">
-      Save
-    </button>
-    <button (click)="changePassword()" class="btn btn-primary">
-      Change password
-    </button>
+    <div class="col">
+      <button *ngIf="!isEditModeEnabled" (click)="startEdit()" class="btn btn-info">
+        Edit
+      </button>
+      <button *ngIf="isEditModeEnabled" (click)="cancelEditing()" class="btn btn-warning mr-2">
+        Cancel
+      </button>
+      <button *ngIf="isEditModeEnabled" (click)="saveUserData()" class="btn btn-success">
+        Save
+      </button>
+    </div>
   </div>
 </div>

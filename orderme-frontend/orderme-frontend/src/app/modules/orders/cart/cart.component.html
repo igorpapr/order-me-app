@@ -5,7 +5,12 @@
   <hr>
   <div *ngIf="cartListObservable">
     <div class="row" *ngFor="let item of (cartListObservable | async)">
-      <div class="col">{{item.goods.title}}</div>
+
+        <div class="col">
+          <a routerLink="/goods/{{item.goods.goodsId}}">
+            {{item.goods.title}}
+          </a>
+        </div>
       <div class="col">${{item.goods.actualPrice}}</div>
       <div class="col">{{item.amount}}</div>
       <div class="col">

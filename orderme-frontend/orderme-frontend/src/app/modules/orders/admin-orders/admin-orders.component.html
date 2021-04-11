@@ -21,6 +21,9 @@
     </div>
   </div>
   <hr>
+  <div *ngIf="isEmpty">
+    The list is empty
+  </div>
   <div *ngIf="paginationObject" class="row">
     <div *ngFor="let item of paginationObject.content" class="card w-100">
       <a class="deco-none" routerLink="/orders/{{item.orderId}}">
@@ -41,7 +44,17 @@
         <p class="card-title"><strong>Creation time:</strong> {{item.creationTime | date:dateService.datetimePattern:dateService.currentTimezone}}</p>
         <p class="card-text"><strong>Last update time:</strong> {{item.lastUpdateTime | date:dateService.datetimePattern:dateService.currentTimezone}}</p>
         <hr>
-        <p class="card-text"><strong>Shop:</strong> {{item.shop.title}} - {{item.shop.address}}</p>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <p class="card-text"><strong>Shop:</strong> {{item.shop.title}} - {{item.shop.address}}</p>
+            </div>
+            <div *ngIf="item.createdBy" class="col">
+              <p class="card-text"><strong>Created by: </strong>{{item.createdBy.firstName}} {{item.createdBy.lastName}}</p>
+            </div>
+            <div *ngIf="item.processingBy" class="card-text"><strong>Processing by: </strong>{{item.processingBy.firstName}} {{item.processingBy.lastName}}</div>
+          </div>
+        </div>
         <hr>
         <p class="card-text text-right"><strong>Resulting price: ${{item.fullPrice}}</strong></p>
         <button *ngIf="!item.processingBy" (click)="startProcessing(item.orderId, false)" class="btn btn-warning mr-2">Assign to me</button>
@@ -50,7 +63,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="paginationObject" class="row">
+  <div *ngIf="paginationObject && !isEmpty" class="row w-100 mt-2 justify-content-center">
     <ngb-pagination [collectionSize]="paginationObject ? paginationObject.totalElements : 0" [pageSize]="pageSize" [(page)]="currentPageNumber" [maxSize]="5" (pageChange)="changePage($event)"></ngb-pagination>
   </div>
 </div>

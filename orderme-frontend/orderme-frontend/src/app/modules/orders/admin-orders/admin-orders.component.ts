@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {Page} from "../../core/model/page";
 import {Order} from "../../core/model/order";
 import {faSpinner} from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +11,8 @@ import {OrderStatus} from "../../core/model/order-status";
 import {WindowService} from "../../core/services/util/window.service";
 import {OrderDto} from "../../core/model/dto/orderDto";
 import {Router} from "@angular/router";
+import {ShopsService} from "../../core/services/shops/shops.service";
+import {Shop} from "../../core/model/shop";
 
 @Component({
   selector: 'app-admin-orders',
@@ -18,26 +20,21 @@ import {Router} from "@angular/router";
   styleUrls: ['./admin-orders.component.scss']
 })
 export class AdminOrdersComponent implements OnInit, OnDestroy {
-
   active = 1;
   isLoading: boolean = false;
   isEmpty: boolean = false;
   readonly pageSize: number = 3;
-  //todo
-  shopId: number = 4;
-
+  currentShop: Observable<Shop>;
   subscription: Subscription = new Subscription();
   faSpinner = faSpinner;
   currentPageNumber: number = 1;
   // @ts-ignore
   paginationObject: Page<Order>;
   ordersList: Order[] = [];
-
   isProcessingByMeChecked: boolean = true;
   isUnprocessedOnlyChecked: boolean = false;
   // @ts-ignore
   filterOrderStatus: OrderStatus;
-
   orderStatusesToFilter: string[];
 
   constructor(private orderService: OrderService,
@@ -45,12 +42,19 @@ export class AdminOrdersComponent implements OnInit, OnDestroy {
               private toastsService: ToastsService,
               public dateService: DateService,
               private windowService: WindowService,
-              private router: Router) {
+              private router: Router,
+              private shopsService: ShopsService) {
     // @ts-ignore
     // This is being used because typescript doesn't have reverse mapping of string enums
     let statuses: string[] = Object.values(OrderStatus).map(value => value.toString());
     statuses.unshift("All")
     this.orderStatusesToFilter = statuses;
+    this.currentShop = shopsService.currentShop;
+    this.currentShop.subscribe(
+      () => {
+        this.fetchOrders();
+      }
+    )
   }
 
   ngOnInit(): void {
@@ -62,7 +66,7 @@ export class AdminOrdersComponent implements OnInit, OnDestroy {
     this.subscription.add(this.orderService.getOrdersList(
       this.currentPageNumber - 1,
             this.pageSize,
-            this.shopId,
+            this.shopsService.currentShopValue?.shopId,
             null,
       this.isProcessingByMeChecked ? this.authenticationService.currentUserValue.userId : null,
             this.filterOrderStatus,
@@ -70,6 +74,7 @@ export class AdminOrdersComponent implements OnInit, OnDestroy {
     ).subscribe(
       data => {
         this.isLoading = false;
+        this.isEmpty = data?.content.length === 0;
         this.paginationObject = data;
       }, error => {
         console.error(error);

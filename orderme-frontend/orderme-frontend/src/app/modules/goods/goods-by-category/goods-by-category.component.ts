@@ -6,7 +6,9 @@ import {ToastsService} from "../../core/services/util/toasts.service";
 import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 import {GoodsTypeService} from "../../core/services/goods/goods-type.service";
 import {Page} from "../../core/model/page";
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
+import {ShopsService} from "../../core/services/shops/shops.service";
+import {Shop} from "../../core/model/shop";
 
 @Component({
   selector: 'app-goods-by-category',
@@ -24,9 +26,7 @@ export class GoodsByCategoryComponent implements OnInit, OnDestroy {
   isEmpty: boolean;
   faSpinner = faSpinner;
   currentPage: number;
-  // @ts-ignore
-  //TODO
-  shopId: number;
+  currentShop: Observable<Shop>;
   public state = '';
   // @ts-ignore
   paginationObject: Page<Goods>;
@@ -36,10 +36,12 @@ export class GoodsByCategoryComponent implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,
               private router: Router,
               public toastsService: ToastsService,
-              private goodsTypeService: GoodsTypeService) {
+              private goodsTypeService: GoodsTypeService,
+              private shopsService: ShopsService) {
     this.isLoading = false;
     this.isEmpty = false;
     this.currentGoodsTypeId = this.activatedRoute.snapshot.params.id;
+    this.currentShop = shopsService.currentShop;
     this.currentPage = 1;
   }
 
@@ -53,11 +55,10 @@ export class GoodsByCategoryComponent implements OnInit, OnDestroy {
 
   private fetchGoodsByCurrentGoodsTypeId() {
     this.isLoading = true;
-    this.subscription.add(this.goodsService.getAllGoodsListByGoodsType(this.shopId,
+    this.subscription.add(this.goodsService.getAllGoodsListByGoodsType(this.shopsService.currentShopValue?.shopId,
       this.currentGoodsTypeId, this.currentPage - 1, this.pageSize)
       .subscribe(data => {
         this.paginationObject = data;
-        //console.log(JSON.stringify(data));
         if (data.content?.length===0) {
           this.isEmpty = true;
         }
@@ -104,6 +105,6 @@ export class GoodsByCategoryComponent implements OnInit, OnDestroy {
   }
 
   getGoodsAvailability(item: Goods) {
-    this.goodsService.getGoodsAvailabilityByShop(item, this.shopId);
+    return this.goodsService.getGoodsAvailabilityByShop(item, this.shopsService.currentShopValue.shopId);
   }
 }

@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title">Registration</h4>
+  <h4 class="modal-title">Please, register</h4>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Exit clicked')">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -7,44 +7,41 @@
 <div class="container mt-4 mb-4">
   <div class="row">
     <div class="col">
-      <span>First name<br><br>
-        Last name<br><br>
-        Email<br><br>
-        Password<br><br>
-        Confirm Password
-      </span>
-    </div>
-    <div class="col">
-      <form action="#">
         <div class="form-group">
-          <input type="text" ngbAutofocus class="form-control rounded" placeholder="First name *"
+          <label for="firstname">
+            First name:
+          </label>
+          <input id="firstname" type="text" class="form-control rounded" placeholder="First name *"
                  name="firstName"
                  [(ngModel)]="firstName" pattern="\w+">
         </div>
         <div class="form-group">
-          <input type="text" class="form-control rounded" placeholder="Last name *"
+          <label for="lastname">Last name: </label>
+          <input id="lastname" type="text" class="form-control rounded" placeholder="Last name *"
                  name="lastName"
                  [(ngModel)]="lastName" pattern="\w+">
         </div>
         <div class="form-group">
-          <input type="email" name="email" placeholder="Email" class="form-control rounded"
+          <label for="email">Email: </label>
+          <input id="email" type="email" name="email" placeholder="Email *" class="form-control rounded"
                  [(ngModel)]="email"
                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"/>
         </div>
         <div class="form-group">
-          <input type="password" name="password" class="form-control rounded"
-                 placeholder="Password" [(ngModel)]="password"/>
+          <label for="password">Password: </label>
+          <input id="password" type="password" name="password" class="form-control rounded"
+                 placeholder="Password *" [(ngModel)]="password"/>
         </div>
         <div class="form-group">
-          <input type="password" name="password" class="form-control rounded"
-                 placeholder="Confirm password" [(ngModel)]="confirmPassword"/>
+          <label for="confirm">Confirm password: </label>
+          <input id="confirm" type="password" name="password" class="form-control rounded"
+                 placeholder="Confirm password *" [(ngModel)]="confirmPassword"/>
         </div>
         <button type="submit" [disabled]="isLoading" class="btn btn-info border-0 btn-lg float-right" (click)="registerUser()">
           <span *ngIf="!isLoading" class="text">Sign up</span>
           <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           <span *ngIf="isLoading" class="sr-only">Loading...</span>
         </button>
-      </form>
     </div>
   </div>
   <div *ngIf="message" class="mt-2 text-center h4 alert alert-warning">

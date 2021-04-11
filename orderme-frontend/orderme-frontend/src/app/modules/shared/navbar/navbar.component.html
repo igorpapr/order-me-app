@@ -1,57 +1,51 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg fixed-top ">
   <a class="navbar-brand" href="#">OrderMe</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+  <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse text-light" id="toggle">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
       <li class="nav-item active">
-        <a class="nav-link" routerLink="">Home</a>
+        <a class="nav-link" routerLink="" (click)="isMenuCollapsed = true">Home</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/categories">Categories</a>
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/categories" (click)="isMenuCollapsed = true">Categories</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/goods">Goods</a>
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/goods" (click)="isMenuCollapsed = true">Goods</a>
       </li>
-      <li *ngIf="!(isAdmin || isSuperAdmin) && isSignedIn" class="nav-item">
-        <a class="nav-link" routerLink="/my-orders">My orders</a>
+      <li *ngIf="!(isAdmin || isSuperAdmin) && isSignedIn" class="nav-item active">
+        <a class="nav-link" routerLink="/my-orders" (click)="isMenuCollapsed = true">My orders</a>
       </li>
-      <li *ngIf="isAdmin || isSuperAdmin" class="nav-item">
-        <a class="nav-link" routerLink="/admin-orders">Orders</a>
+      <li *ngIf="isAdmin || isSuperAdmin" class="nav-item active">
+        <a class="nav-link" routerLink="/admin-orders" (click)="isMenuCollapsed = true">Orders</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/info">Info</a>
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/info" (click)="isMenuCollapsed = true">Info</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/contacts">Contacts</a>
+      <li *ngIf="isSuperAdmin" class="nav-item active">
+        <a class="nav-link" routerLink="/admin-create" (click)="isMenuCollapsed = true">Create admin</a>
       </li>
-      <li *ngIf="isSuperAdmin" class="nav-item">
-        <a class="nav-link" routerLink="/admin-create">Create admin</a>
-      </li>
-
     </ul>
-<!--    <form class="form-inline my-2 my-lg-0">-->
-<!--      <input class="form-control mr-sm-2" type="search" placeholder="Search">-->
-<!--      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
-<!--    </form>-->
-    <button *ngIf="isSignedIn" class="nav-item btn btn-outline-dark" routerLink="/profile">
+    <label class="mr-1">Shop:</label>
+    <app-shops class=" mr-1"></app-shops>
+    <button *ngIf="isSignedIn" class="nav-item btn btn-outline-dark mr-1" routerLink="/profile">
       My profile
     </button>
-    <button *ngIf="!(isSuperAdmin || isAdmin)" class="nav-item btn btn-outline-dark"
+    <button *ngIf="!(isSuperAdmin || isAdmin)" class="nav-item btn btn-outline-dark mr-1"
             routerLink="/cart">
       Cart
     </button>
-    <button *ngIf="!isSignedIn" class="nav-item btn btn-outline-dark"
+    <button *ngIf="!isSignedIn" class="nav-item btn btn-outline-dark mr-1"
       (click)="openSignInForm()">
       Sign In
     </button>
-    <button *ngIf="!isSignedIn" class="nav-item btn btn-outline-dark"
+    <button *ngIf="!isSignedIn" class="nav-item btn btn-outline-dark mr-1"
             (click)="openSignUpForm()">
       Sign Up
     </button>
-    <button *ngIf="isSignedIn" class="nav-item btn btn-outline-dark"
+    <button *ngIf="isSignedIn" class="nav-item btn btn-outline-dark mr-1"
             (click)="logOut()">
       Log out
     </button>

@@ -1,13 +1,16 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../../../../environments/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {Shop} from "../../model/shop";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShopsService {
+
+  private _currentShopSubject: BehaviorSubject<Shop>;
+  public currentShop: Observable<Shop>;
 
   private SHOPS_URL = `${environment.apiUrl_v1}shops`
 
@@ -18,6 +21,17 @@ export class ShopsService {
   };
 
   constructor(private http: HttpClient) {
+    // @ts-ignore
+    this._currentShopSubject = new BehaviorSubject<Shop>(undefined);
+    this.currentShop = this._currentShopSubject.asObservable();
+  }
+
+  public get currentShopValue(): Shop {
+    return this._currentShopSubject.value;
+  }
+
+  public set currentShopValue(value: Shop) {
+    this._currentShopSubject.next(value);
   }
 
   public getAllShops(): Observable<Shop[]> {

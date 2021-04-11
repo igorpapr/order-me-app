@@ -20,6 +20,7 @@ import {AngularFireStorageModule} from "@angular/fire/storage";
 import {environment} from "../environments/environment";
 import {AuthenticationInterceptor} from "./modules/core/utils/interceptors/authentication.interceptor";
 import {UnauthorizederrorInterceptor} from "./modules/core/utils/interceptors/unauthorizederror.interceptor";
+import {MainModule} from "./modules/main/main.module";
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import {UnauthorizederrorInterceptor} from "./modules/core/utils/interceptors/un
     FontAwesomeModule,
     SharedModule,
     ProfileModule,
+    MainModule,
     OrdersModule,
     GoodsModule,
     AuthModule,

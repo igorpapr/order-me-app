@@ -12,17 +12,12 @@ import {UserDto} from "../../core/model/dto/userDto";
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-
   // @ts-ignore
   currentUser: User;
-
   currentUserCopy: User | undefined;
   isLoading: boolean =  true;
   subscription: Subscription = new Subscription();
-
   isEditModeEnabled: boolean = false;
-
-  //todo change password (maybe reuse the recover password component)
 
   constructor(private authenticationService: AuthenticationService,
               private userService: UserService,
@@ -82,12 +77,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.currentUser = Object.assign(this.currentUser, this.currentUserCopy);
     this.currentUserCopy = undefined;
     this.isEditModeEnabled = false;
-  }
-
-  changePassword() {
-    if (this.isEditModeEnabled) {
-      this.cancelEditing();
-    }
-    //todo - change
   }
 }

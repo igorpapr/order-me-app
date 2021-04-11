@@ -16,7 +16,6 @@ import {LocalStorageService} from "../util/local-storage.service";
 export class AuthenticationService {
 
   public readonly NUMBER_OF_HASHING_ITERATIONS = 5;
-  // private readonly LOCAL_STORAGE_USER_DATA_KEY = 'userData';
   private currentUserDataSubject: BehaviorSubject<UserData>;
   public currentUserData: Observable<UserData>;
 
@@ -35,7 +34,6 @@ export class AuthenticationService {
               private handleErrorsService: HandleErrorsService,
               private localStorageService: LocalStorageService) {
 
-    //TODO check correctness
     this.currentUserDataSubject = new BehaviorSubject<UserData>(
       // @ts-ignore
       this.localStorageService.getJwt()
@@ -91,9 +89,7 @@ export class AuthenticationService {
     //   language: this.localeService.getLanguage()
     // };JSON.stringify(userInfo)
     //TODO - password hashing
-    console.log("outcoming request: " + JSON.stringify(registrationRequest));
     return this.http.post<any>(this.REGISTER_URL, registrationRequest, this.httpOptions);
-      // .pipe(catchError(this.handleErrorsService.handleError<any>('registerUser')));
   }
 
   /**
@@ -115,7 +111,5 @@ export class AuthenticationService {
     this.currentUserDataSubject.next(null);
   }
 
-  //TODO - maybe locale
-  //TODO - change password
   //TODO - password hashing
 }

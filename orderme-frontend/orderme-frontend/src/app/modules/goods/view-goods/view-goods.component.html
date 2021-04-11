@@ -1,78 +1,90 @@
 <div class="container">
   <div *ngIf="!isEditModeEnabled; else (isLoading ? loading : editing)">
     <div class="row">
-      <div *ngIf="isAdministrator" class="col">
-        <button (click)="startEditing()" class="btn btn-info">Edit</button>
+      <div *ngIf="isAdministrator" class="col mt-2">
+        <button (click)="startEditing()" class="btn btn-info mr-2">Edit</button>
         <button routerLink="/goods/availabilities/{{currentGoodsId}}" class="btn btn-info">Edit availabilities</button>
-        <button (click)="deleteCurrentGoods()" class="btn btn-danger">Delete</button>
+        <button (click)="deleteCurrentGoods()" class="btn btn-danger float-right">Delete</button>
+        <hr>
       </div>
     </div>
     <div class="row">
-      <div class="col-12">
+      <div class="col-8">
         <h2>{{currentGoods.title}}</h2>
       </div>
-    </div>
-    <div *ngIf="(!filePath) && currentGoods.imageLink" class="w-80">
-      <img class="img-fluid" [src]="currentGoods.imageLink | getDownloadURL"  alt="Current photo"/>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <p>Description: {{currentGoods.description}}
+      <div *ngIf="currentGoods.goodsType" class="col-4">
+        <p class="align-middle"><strong>Category:</strong> {{currentGoods.goodsType.title}}
         </p>
       </div>
     </div>
+    <hr>
+    <div class="row">
+      <div class="embed-responsive embed-responsive-4by3 w-30 col-4">
+        <img class="img-thumbnail card-img-top  embed-responsive-item"
+             [src]="!(currentGoods.imageLink) ? this.noImagePath : (currentGoods.imageLink | getDownloadURL)"
+             alt="Current photo"/>
+      </div>
+      <div class="col-8">
+        <p><strong>Description:</strong> {{currentGoods.description}}
+        </p>
+      </div>
+    </div>
+    <hr>
     <div *ngIf="currentGoods.oldPrice" class="row">
       <div class="col-12">
         <p>
-          Old price:
           <strong>
-          ${{currentGoods.oldPrice}}
+            Old price:
           </strong>
+          <span style="text-decoration: line-through;">
+              ${{currentGoods.oldPrice}}
+          </span>
         </p>
       </div>
     </div>
     <div class="row">
       <div class="col-12">
-        <p>Current price: <strong>${{currentGoods.actualPrice}}</strong>
+        <p><strong>Current price: <span class="text-danger">${{currentGoods.actualPrice}}</span></strong>
         </p>
       </div>
     </div>
-    <div *ngIf="currentGoods.goodsType" class="row">
-      <div class="col-12">
-        <h4 *ngIf="currentGoods.goodsType.title">Category: {{currentGoods.goodsType.title}}
-        </h4>
-      </div>
-    </div>
-    <div *ngIf="currentShopId && currentGoods" class="row">
+    <hr>
+    <div *ngIf="(currentShop | async) && currentGoods" class="row">
       <div class="col-12">
         <p>Availability:
           {{getCurrentGoodsAvailabilityByShop()}}
         </p>
       </div>
     </div>
-    <div *ngIf="!currentShopId">
+    <div *ngIf="!(currentShop | async)">
       <p><small>Please, choose the shop to show goods' availability</small></p>
     </div>
-    <div>
-      GET AMOUNT HERE
-    </div>
     <div class="row" *ngIf="!isAdministrator">
-      <div>
-        CURRENT AMOUNT HERE (now = 1)
-      </div>
-      <div class="row">
-        <div class="col" [ngbPopover]="popoverContent" triggers="mouseenter:mouseleave" placement="right" popoverTitle="Availability" >
-          <button class="btn btn-primary" [disabled]="!canActivateButton" (click)="addToCart($event, linkToCartTpl)">
-            Add to cart
-          </button>
+      <div class="col">
+
+        <label>
+          Choose amount:
+          <input type="number" [min]="1" [max]="999" placeholder="1" [(ngModel)]="currentAmountToAddToCart" oninput="validity.valid||(value='');">
+        </label>
+        <div>
+          <div [ngbPopover]="popoverContent" triggers="mouseenter:mouseleave" placement="right"
+               popoverTitle="Availability">
+            <button class="btn btn-primary float-right mr-md-5" [disabled]="!canActivateButton" (click)="addToCart($event, linkToCartTpl)">
+              Add to cart
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 <ng-template #popoverContent>
-  The goods is {{this.canActivateButton ?"available":"not available"}} in the selected shop
+  <p *ngIf="currentShop | async">
+    The goods is {{this.canActivateButton ? "available" : "not available"}} in the selected shop
+  </p>
+  <p *ngIf="!(currentShop | async)">
+    Please, choose a shop in the navigation bar
+  </p>
 </ng-template>
 
 <ng-template #linkToCartTpl>
@@ -87,7 +99,10 @@
 
 <ng-template #editing>
   <div class="row">
-    <form [formGroup]="goodsEditFormGroup" (ngSubmit)="saveGoodsEditing()" >
+    <button routerLink="/goods/availabilities/{{currentGoodsId}}" class="btn btn-info">Edit availabilities</button>
+  </div>
+  <div class="row">
+    <form [formGroup]="goodsEditFormGroup" (ngSubmit)="saveGoodsEditing()">
       <div>
         <label for="file">You can choose a new photo file to upload: </label><br>
         <input id="file" type="file" accept="image/*" (change)="uploadFile($event)">
@@ -102,25 +117,30 @@
         </div>
         <div *ngIf="(!filePath) && currentGoods.imageLink" class="w-80">
           <p>Current photo: </p>
-          <img class="img-fluid" [src]="currentGoods.imageLink | getDownloadURL"  alt="Current photo"/>
+          <img class="img-fluid" [src]="currentGoods.imageLink | getDownloadURL" alt="Current photo"/>
         </div>
       </div>
       <div class="form-group">
         <label class="control-label" for="title">Title <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="title" aria-describedby="titleHelper" placeholder="Enter goods title" formControlName="Title" required>
+        <input type="text" class="form-control" id="title" aria-describedby="titleHelper"
+               placeholder="Enter goods title" formControlName="Title" required>
         <small id="titleHelper" class="form-text text-muted">Enter the new goods title</small>
       </div>
 
       <div class="form-group">
         <label class="control-label" for="description">Description: </label>
-        <input type="text" class="form-control" id="description" aria-describedby="descriptionHelper" placeholder="Enter description" formControlName="Description">
+        <input type="text" class="form-control" id="description" aria-describedby="descriptionHelper"
+               placeholder="Enter description" formControlName="Description">
         <small id="descriptionHelper" class="form-text text-muted">Enter the description</small>
       </div>
 
       <div class="form-group">
-        <label class="control-label" for="price">Price (old price = {{currentGoods.oldPrice}}, actual price = {{currentGoods.actualPrice}}): </label>
-        <input type="text" class="form-control" id="price" aria-describedby="priceHelper" placeholder="Enter price" formControlName="NewPrice">
-        <small id="priceHelper" class="form-text text-muted">Enter the new goods price consisting of positive numbers with up to two decimal digits</small>
+        <label class="control-label" for="price">Price (old price = {{currentGoods.oldPrice}}, actual price
+          = {{currentGoods.actualPrice}}): </label>
+        <input type="text" class="form-control" id="price" aria-describedby="priceHelper" placeholder="Enter price"
+               formControlName="NewPrice">
+        <small id="priceHelper" class="form-text text-muted">Enter the new goods price consisting of positive numbers
+          with up to two decimal digits</small>
       </div>
 
       <div class="form-group">
@@ -129,7 +149,7 @@
           <option *ngFor="let item of goodsTypes" [ngValue]="item">{{item.title}}</option>
         </select>
       </div>
-      <button class="btn btn-warning" (click)="cancelEditing()">Cancel</button>
+      <button class="btn btn-warning mr-2" (click)="cancelEditing()">Cancel</button>
       <button class="btn btn-primary pull-right" [disabled]="!goodsEditFormGroup.valid" type="submit">Submit</button>
     </form>
   </div>

@@ -15,6 +15,8 @@ import {GoodsTypeService} from "../../core/services/goods/goods-type.service";
 import {finalize} from "rxjs/operators";
 import {FirebaseService} from "../../core/services/util/firebase.service";
 import {AvailabilityStatus} from "../../core/model/availability-status";
+import {Shop} from "../../core/model/shop";
+import {ShopsService} from "../../core/services/shops/shops.service";
 
 @Component({
   selector: 'app-view-goods',
@@ -22,34 +24,25 @@ import {AvailabilityStatus} from "../../core/model/availability-status";
   styleUrls: ['./view-goods.component.scss']
 })
 export class ViewGoodsComponent implements OnInit, OnDestroy {
-
   faSpinner = faSpinner;
   currentGoodsId: string;
   isLoading: boolean;
-  //TODO!!!
-  // @ts-ignore
-  currentShopId: number = 5;
+  currentShop: Observable<Shop>;
   // @ts-ignore
   currentGoods: Goods;
   isAdministrator: boolean = false;
   private subscription: Subscription = new Subscription();
-
   goodsTypes: GoodsType[] = [];
-
   isEditModeEnabled: boolean = false;
   cachedGoodsState: Goods | undefined;
-
   currentAmountToAddToCart: number;
-
   canActivateButton: boolean = false;
-
   isUploadingPhoto: boolean = false;
-
   // @ts-ignore
   uploadPercent: Observable<number | undefined>;
   // @ts-ignore
   filePath: string | undefined;
-
+  readonly noImagePath: string = './assets/img/no-image.jpg';
   // @ts-ignore
   goodsEditFormGroup: FormGroup = new FormGroup(
     {
@@ -78,11 +71,19 @@ export class ViewGoodsComponent implements OnInit, OnDestroy {
               private cartService: CartService,
               private authenticationService: AuthenticationService,
               private goodsTypesService: GoodsTypeService,
-              private firebaseService: FirebaseService) {
+              private firebaseService: FirebaseService,
+              private shopsService: ShopsService) {
     this.currentGoodsId = this.activatedRoute.snapshot.params.id;
     this.isLoading = true;
     this.currentGoods = new Goods();
-    //todo
+    this.currentShop = shopsService.currentShop;
+    this.subscription.add(this.currentShop.subscribe(
+      () => {
+        if (this.shopsService.currentShopValue) {
+          this.setCanActivateButton()
+        }
+      }
+    ));
     this.currentAmountToAddToCart = 1;
     if (authenticationService.isAuthenticated()) {
       this.isAdministrator =
@@ -96,29 +97,29 @@ export class ViewGoodsComponent implements OnInit, OnDestroy {
   }
 
   private setCanActivateButton() {
-    if (this.currentGoods.goodsAvailabilities && this.currentShopId) {
+    if (this.currentGoods.goodsAvailabilities && this.shopsService.currentShopValue?.shopId) {
       for (let item of this.currentGoods.goodsAvailabilities) {
-        if (item.goodsAvailabilitiesId.shopId === this.currentShopId) {
+        if (item.goodsAvailabilitiesId.shopId === this.shopsService.currentShopValue?.shopId) {
           if (item.availabilityStatus) {
             this.canActivateButton = !(this.goodsService.getAvailabilityStatus(item.availabilityStatus)
               === AvailabilityStatus.NOT_AVAILABLE);
-          } else {
-            this.canActivateButton = false;
+            return;
           }
         }
       }
     }
+    this.canActivateButton = false;
   }
 
   fetchGoodsData(): void {
     this.isLoading = true;
     this.subscription.add(
-      this.goodsService.getGoodsByIdAndShopId(this.currentShopId, this.currentGoodsId)
+      this.goodsService.getGoodsByIdAndShopId(this.shopsService.currentShopValue?.shopId, this.currentGoodsId)
         .subscribe(data => {
           this.currentGoods = data;
-            if (this.currentShopId) {
-            this.setCanActivateButton();
-          }
+            if (this.shopsService.currentShopValue?.shopId) {
+              this.setCanActivateButton();
+            }
         },
           error => {
           console.error(error);
@@ -220,9 +221,7 @@ export class ViewGoodsComponent implements OnInit, OnDestroy {
     this.isUploadingPhoto = true;
     const task = this.firebaseService.uploadFile(file, filePathToUpload);
 
-    // observe percentage changes
     this.uploadPercent = task.percentageChanges();
-    // get notified when the download URL is available
     task.snapshotChanges().pipe(
       finalize(() => {
         this.filePath = filePathToUpload
@@ -233,6 +232,6 @@ export class ViewGoodsComponent implements OnInit, OnDestroy {
   }
 
   getCurrentGoodsAvailabilityByShop() {
-    return this.goodsService.getGoodsAvailabilityByShop(this.currentGoods, this.currentShopId);
+    return this.goodsService.getGoodsAvailabilityByShop(this.currentGoods, this.shopsService.currentShopValue?.shopId);
   }
 }

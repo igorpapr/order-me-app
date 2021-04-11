@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {Goods} from "../../core/model/goods";
 import {GoodsService} from "../../core/services/goods/goods.service";
 import {Router} from "@angular/router";
@@ -8,6 +8,8 @@ import {Page} from "../../core/model/page";
 import {WindowService} from "../../core/services/util/window.service";
 import {AuthenticationService} from "../../core/services/auth/authentication.service";
 import {UserRole} from "../../core/model/userRole";
+import {ShopsService} from "../../core/services/shops/shops.service";
+import {Shop} from "../../core/model/shop";
 
 @Component({
   selector: 'app-all-goods',
@@ -28,9 +30,7 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
   currentPageNumber: number = 1;
   readonly pageSize: number = 9;
 
-  //todo @INPUT as separate component
-  // @ts-ignore
-  currentShopId: number = 4;
+  currentShop: Observable<Shop>;
   isAdministrator: boolean = false;
   readonly noImagePath: string = './assets/img/no-image.jpg';
 
@@ -38,11 +38,13 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
               private router: Router,
               private toastsService: ToastsService,
               private windowService: WindowService,
-              private authenticationService: AuthenticationService) {
+              private authenticationService: AuthenticationService,
+              private shopsService: ShopsService) {
     if (authenticationService.isAuthenticated()) {
       this.isAdministrator = (authenticationService.currentUserValue.userRole === UserRole.ADMIN
         || authenticationService.currentUserValue.userRole === UserRole.SUPER_ADMIN);
     }
+    this.currentShop = shopsService.currentShop;
   }
 
   ngOnInit(): void {
@@ -54,12 +56,12 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
 
   private fetchGoods() {
     this.isLoading = true;
-    //todo maybe add filtration by goods type also - than change service method call dependently
-    this.goodsService.getAllGoodsList(this.currentPageNumber - 1, this.pageSize, this.currentShopId)
+    this.goodsService.getAllGoodsList(this.currentPageNumber - 1, this.pageSize, this.shopsService.currentShopValue?.shopId)
       .subscribe(
         data => {
             this.paginationObject = data;
             this.isLoading = false;
+            this.isEmpty = data?.content.length === 0;
         }, error => {
           console.error(error);
           this.toastsService.toastAddDanger('Something went wrong during fetching goods from the server. Please, contact the administrators');
@@ -68,7 +70,6 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
       );
   }
 
-
   changePage(event: number) {
     this.currentPageNumber = event;
     this.fetchGoods();
@@ -76,7 +77,7 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
   }
 
   getGoodsAvailability(goods: Goods) {
-    return this.goodsService.getGoodsAvailabilityByShop(goods, this.currentShopId);
+    return this.goodsService.getGoodsAvailabilityByShop(goods, this.shopsService.currentShopValue.shopId);
   }
 
 }

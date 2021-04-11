@@ -1,0 +1,6 @@
+<div>
+  <select id="shop" class="custom-select" [(ngModel)]="selectedShop" (change)="setSelectedShop()">
+    <option value="" disabled>Choose shop</option>
+    <option *ngFor="let item of shopsList" [ngValue]="item">{{item.title}}: {{item.address}}</option>
+  </select>
+</div>

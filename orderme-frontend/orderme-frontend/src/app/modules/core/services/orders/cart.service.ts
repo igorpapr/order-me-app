@@ -63,7 +63,6 @@ export class CartService {
   }
 
   public checkout(shopId: number): Observable<Order> | null {
-    //todo CHECK IF USER IS SIGNED IN!!!!!!!!!!!!!!!!
     let orderDto: OrderDto = new OrderDto();
     orderDto.orderLines = [];
     orderDto.shopId = shopId;

@@ -64,7 +64,7 @@ export class OrderService {
     if (status !== undefined && status !== null) {
       requestParams = requestParams.append('status', String(status))
     }
-    if (shopId !== null) {
+    if (shopId) {
       requestParams = requestParams.append('shopId', String(shopId))
     }
     requestParams = requestParams.append('unprocessedOnly', String(unprocessedOnly))

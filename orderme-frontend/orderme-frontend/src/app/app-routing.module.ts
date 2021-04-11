@@ -18,6 +18,7 @@ import {CategoryEditComponent} from "./modules/goods/category-edit/category-edit
 import {AuthenticationGuard} from "./modules/core/utils/guards/authentication.guard";
 import {UserRole} from "./modules/core/model/userRole";
 import {GoodsAvailabilityConfigurationComponent} from "./modules/goods/goods-availability-configuration/goods-availability-configuration.component";
+import {InfoComponent} from "./modules/main/info/info.component";
 
 const routes: Routes = [
   {path: '', component: LandingPageComponent},
@@ -56,6 +57,7 @@ const routes: Routes = [
     component: CategoryEditComponent,
     canActivate: [AuthenticationGuard],
     data: {roles: [UserRole.ADMIN, UserRole.SUPER_ADMIN]}},
+  {path: 'info', component: InfoComponent},
   {path: '**', redirectTo: ''}
 ];
 

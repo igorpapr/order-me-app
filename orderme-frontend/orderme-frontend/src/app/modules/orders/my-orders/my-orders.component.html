@@ -4,11 +4,8 @@
       Your orders
     </h2>
   </div>
-<!--  <div class="row">-->
-<!--    Filtration + maybe sorting + SELECT shopId-->
-<!--  </div>-->
   <div class="row">
-      <div *ngFor="let item of ordersList" class="card w-100">
+      <div *ngFor="let item of ordersList" class="card w-100 mt-2">
         <a class="deco-none" routerLink="/orders/{{item.orderId}}">
         <h4 *ngIf="item.orderStatus" class="card-header"><strong>Status:</strong> {{getOrderStatus(item.orderStatus)}}</h4>
         <div class="card-body">
@@ -17,10 +14,15 @@
           <p class="card-title"><strong>Creation time:</strong> {{item.creationTime | date:dateService.datetimePattern:dateService.currentTimezone}}</p>
           <p class="card-text"><strong>Last update time:</strong> {{item.lastUpdateTime | date:dateService.datetimePattern:dateService.currentTimezone}}</p>
           <hr>
-          <p class="card-text"><strong>Shop:</strong> {{item.shop.title}} - {{item.shop.address}}</p>
+          <div class="col">
+            <p class="card-text"><strong>Shop:</strong> {{item.shop.title}} - {{item.shop.address}}</p>
+          </div>
+          <div *ngIf="item.processingBy">
+            <p class="card-text"><strong>Processing by:</strong> {{item.processingBy.firstName}} {{item.processingBy.lastName}}</p>
+          </div>
           <hr>
           <p class="card-text"><strong>Resulting price: {{item.fullPrice}}</strong></p>
-          <button routerLink="/orders/{{item.orderId}}" class="btn btn-info">Show</button>
+          <button routerLink="/orders/{{item.orderId}}" class="btn btn-info float-right mb-2">Show</button>
         </div>
         </a>
       </div>

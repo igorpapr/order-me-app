@@ -16,6 +16,7 @@ export class NavbarComponent implements OnInit{
   isSignedIn: boolean;
   isAdmin: boolean;
   isSuperAdmin: boolean;
+  isMenuCollapsed: boolean = true;
 
   constructor(private authenticationService: AuthenticationService,
               private modalService: NgbModal,

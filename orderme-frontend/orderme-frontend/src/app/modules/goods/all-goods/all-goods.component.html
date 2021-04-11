@@ -4,15 +4,15 @@
       Goods
     </h2>
   </div>
-  <div class="row">
-    Search area to the right (MAYBE NEW COMPONENT) + SELECT shopId (MAYBE NEW COMPONENT)
-  </div>
   <div *ngIf="isAdministrator" class="row">
     <div class="col text-right">
       <button routerLink="/goods-create" class="btn btn-info">Create goods</button>
     </div>
   </div>
   <hr>
+  <div *ngIf="isEmpty">
+    The list is empty
+  </div>
   <div class="row" *ngIf="paginationObject">
     <div class="col-md-3 mt-4" *ngFor="let item of paginationObject.content">
       <div class="card">
@@ -23,21 +23,24 @@
           </div>
           <h5 class="card-title">{{item.title}}</h5>
           <p class="card-text">{{item.description}}</p>
-          <p class="card-text">{{item.oldPrice}}</p>
-          <p class="card-text">{{item.actualPrice}}</p>
-          <!--       todo shopId - ? with availabilities, else - not available  -->
-          <p *ngIf="this.currentShopId && item.goodsAvailabilities?.size !== 0" class="card-text">
+          <p class="card-text" *ngIf="item.oldPrice && item.oldPrice !== item.actualPrice"><strong>Old price: </strong>
+            <span style="text-decoration: line-through;">
+              ${{item.oldPrice}}
+            </span>
+          </p>
+          <p class="card-text"><strong>Actual price: </strong>${{item.actualPrice}}</p>
+          <p *ngIf="(this.currentShop | async) && item.goodsAvailabilities?.size !== 0" class="card-text">
             Stock: {{getGoodsAvailability(item)}}
           </p>
-          <p *ngIf="!this.currentShopId" class="card-text">
+          <p *ngIf="!(this.currentShop | async)" class="card-text">
             <small>Please, pick the shop to see availability</small>
           </p>
-          <button routerLink="/goods/{{item.goodsId}}" class="btn btn-info">Show</button>
+          <button routerLink="/goods/{{item.goodsId}}" class="btn btn-info float-right">Show</button>
         </div>
       </div>
     </div>
   </div>
-  <div *ngIf="paginationObject" class="row w-100 mt-2 justify-content-center">
+  <div *ngIf="paginationObject && !isEmpty" class="row w-100 mt-2 justify-content-center">
     <ngb-pagination [collectionSize]="paginationObject ? paginationObject.totalElements : 0" [pageSize]="pageSize"
                     [(page)]="currentPageNumber" [maxSize]="5" (pageChange)="changePage($event)"></ngb-pagination>
   </div>

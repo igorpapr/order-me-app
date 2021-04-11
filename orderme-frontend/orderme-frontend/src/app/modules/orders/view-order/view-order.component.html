@@ -34,6 +34,16 @@
         Shop: {{currentOrder.shop.title}} - {{currentOrder.shop.address}}
       </p>
     </div>
+    <div *ngIf="currentOrder.createdBy" class="col">
+      <p>
+        Created by: {{currentOrder.createdBy.firstName}} {{currentOrder.createdBy.lastName}}
+      </p>
+    </div>
+    <div *ngIf="currentOrder.processingBy" class="col">
+      <p>
+        Processing by: {{currentOrder.processingBy.firstName}} {{currentOrder.processingBy.lastName}}
+      </p>
+    </div>
   </div>
   <hr>
   <div class="row" *ngIf="isOrderEditable()">
@@ -59,7 +69,9 @@
       <tbody>
         <tr *ngFor="let item of currentOrder.orderLines; let i = index">
           <th scope="row">{{i+1}}</th>
-          <td>{{item.goods.title}}</td>
+          <td><a routerLink="/goods/{{item.goods.goodsId}}">
+            {{item.goods.title}}</a>
+          </td>
           <td>{{item.goods.actualPrice}}</td>
           <td *ngIf="!isEditModeEnabled">{{item.amount}}</td>
           <td (change)="recalculateFullPrice()" *ngIf="isEditModeEnabled"><input type="number" [min]="1" [max]="999" placeholder="{{item.amount}}" [(ngModel)]="item.amount" oninput="validity.valid||(value='');"></td>
