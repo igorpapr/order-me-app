@@ -81,11 +81,4 @@ public class OrderController {
 
         return new ResponseEntity<>(orderService.patch(orderDto, id), HttpStatus.OK);
     }
-
-    //TODO is it needed?
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<?> deleteOrder(@PathVariable UUID id) {
-//        orderService.delete(id);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
 }

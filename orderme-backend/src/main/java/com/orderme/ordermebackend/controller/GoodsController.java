@@ -30,6 +30,7 @@ public class GoodsController {
         this.goodsValidationService = goodsValidationService;
     }
 
+    //pageable - page, size https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#core.web
     @GetMapping
     public ResponseEntity<?> getAllGoods(@RequestParam(required = false) Integer shopId,
                                          Pageable pageable) {
@@ -79,5 +80,3 @@ public class GoodsController {
     }
 
 }
-
-//pageable - page, size https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#core.web

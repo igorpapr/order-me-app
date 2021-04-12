@@ -3,6 +3,7 @@ package com.orderme.ordermebackend.config.security;
 import com.orderme.ordermebackend.controller.utils.PathRoutes;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -46,19 +47,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                 .and().exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
                     .authorizeRequests()
-                    .antMatchers(PathRoutes.CHILD_PATH_ADMIN_REGISTER).hasAuthority("SUPER_ADMIN")
-                    .antMatchers(PathRoutes.PATH_AUTH + PathRoutes.CHILD_PATH_AUTH).permitAll()
-                    //.antMatchers("/swagger.html").permitAll()
-                    .anyRequest().permitAll()//.authenticated()
+                        .antMatchers(PathRoutes.PATH_AUTH + PathRoutes.CHILD_PATH_ADMIN_REGISTER).hasAuthority("SUPER_ADMIN")
+                        .antMatchers(PathRoutes.PATH_ORDERS).hasAnyAuthority("SUPER_ADMIN", "ADMIN", "USER")
+                        .antMatchers(PathRoutes.PATH_ORDER_LINES).hasAnyAuthority("SUPER_ADMIN", "ADMIN", "USER")
+                        .antMatchers(HttpMethod.POST,   PathRoutes.PATH_GOODS_AVAILABILITIES + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                        .antMatchers(HttpMethod.PATCH,  PathRoutes.PATH_GOODS_AVAILABILITIES + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE, PathRoutes.PATH_GOODS_AVAILABILITIES + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                        .antMatchers(HttpMethod.POST,   PathRoutes.PATH_GOODS + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                        .antMatchers(HttpMethod.PATCH,  PathRoutes.PATH_GOODS + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE, PathRoutes.PATH_GOODS + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                        .antMatchers(HttpMethod.POST,   PathRoutes.PATH_GOODS_TYPES + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                        .antMatchers(HttpMethod.PATCH,  PathRoutes.PATH_GOODS_TYPES + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE, PathRoutes.PATH_GOODS_TYPES + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                        .antMatchers(HttpMethod.POST,   PathRoutes.PATH_SHOPS + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                        .antMatchers(HttpMethod.PATCH,  PathRoutes.PATH_SHOPS + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE, PathRoutes.PATH_SHOPS + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                    .anyRequest().permitAll()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionHandlerChainFilter, JwtAuthenticationFilter.class);
     }
-
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**").allowedMethods("*");
-//    }
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
