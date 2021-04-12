@@ -4,6 +4,12 @@
       {{state}}
     </h2>
   </div>
+  <div *ngIf="isAdministrator" class="row">
+    <div class="col text-right">
+      <button routerLink="/goods-create" class="btn btn-info">Create goods</button>
+    </div>
+  </div>
+  <hr>
   <div *ngIf="isEmpty">
     The list is empty
     <button routerLink="/categories" class="btn btn-primary">

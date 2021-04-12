@@ -9,6 +9,8 @@ import {Page} from "../../core/model/page";
 import {Observable, Subscription} from "rxjs";
 import {ShopsService} from "../../core/services/shops/shops.service";
 import {Shop} from "../../core/model/shop";
+import {UserRole} from "../../core/model/userRole";
+import {AuthenticationService} from "../../core/services/auth/authentication.service";
 
 @Component({
   selector: 'app-goods-by-category',
@@ -31,18 +33,24 @@ export class GoodsByCategoryComponent implements OnInit, OnDestroy {
   // @ts-ignore
   paginationObject: Page<Goods>;
   readonly noImagePath: string = './assets/img/no-image.jpg';
+  isAdministrator: boolean = false;
 
   constructor(private goodsService: GoodsService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
               public toastsService: ToastsService,
               private goodsTypeService: GoodsTypeService,
-              private shopsService: ShopsService) {
+              private shopsService: ShopsService,
+              private authenticationService: AuthenticationService) {
     this.isLoading = false;
     this.isEmpty = false;
     this.currentGoodsTypeId = this.activatedRoute.snapshot.params.id;
     this.currentShop = shopsService.currentShop;
     this.currentPage = 1;
+    if (authenticationService.isAuthenticated()) {
+      this.isAdministrator = (authenticationService.currentUserValue.userRole === UserRole.ADMIN
+        || authenticationService.currentUserValue.userRole === UserRole.SUPER_ADMIN);
+    }
   }
 
   ngOnInit(): void {
