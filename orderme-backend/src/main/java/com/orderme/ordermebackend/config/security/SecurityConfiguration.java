@@ -19,6 +19,11 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import static com.orderme.ordermebackend.utils.security.RolesConstants.AUTHORITY_ADMIN;
+import static com.orderme.ordermebackend.utils.security.RolesConstants.AUTHORITY_SUPER_ADMIN;
+import static com.orderme.ordermebackend.utils.security.RolesConstants.AUTHORITY_USER;
+
+
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
@@ -47,21 +52,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                 .and().exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
                     .authorizeRequests()
-                        .antMatchers(PathRoutes.PATH_AUTH + PathRoutes.CHILD_PATH_ADMIN_REGISTER).hasAuthority("SUPER_ADMIN")
-                        .antMatchers(PathRoutes.PATH_ORDERS).hasAnyAuthority("SUPER_ADMIN", "ADMIN", "USER")
-                        .antMatchers(PathRoutes.PATH_ORDER_LINES).hasAnyAuthority("SUPER_ADMIN", "ADMIN", "USER")
-                        .antMatchers(HttpMethod.POST,   PathRoutes.PATH_GOODS_AVAILABILITIES + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
-                        .antMatchers(HttpMethod.PATCH,  PathRoutes.PATH_GOODS_AVAILABILITIES + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
-                        .antMatchers(HttpMethod.DELETE, PathRoutes.PATH_GOODS_AVAILABILITIES + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
-                        .antMatchers(HttpMethod.POST,   PathRoutes.PATH_GOODS + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
-                        .antMatchers(HttpMethod.PATCH,  PathRoutes.PATH_GOODS + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
-                        .antMatchers(HttpMethod.DELETE, PathRoutes.PATH_GOODS + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
-                        .antMatchers(HttpMethod.POST,   PathRoutes.PATH_GOODS_TYPES + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
-                        .antMatchers(HttpMethod.PATCH,  PathRoutes.PATH_GOODS_TYPES + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
-                        .antMatchers(HttpMethod.DELETE, PathRoutes.PATH_GOODS_TYPES + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
-                        .antMatchers(HttpMethod.POST,   PathRoutes.PATH_SHOPS + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
-                        .antMatchers(HttpMethod.PATCH,  PathRoutes.PATH_SHOPS + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
-                        .antMatchers(HttpMethod.DELETE, PathRoutes.PATH_SHOPS + "/**").hasAnyAuthority("SUPER_ADMIN", "ADMIN")
+                        .antMatchers(PathRoutes.PATH_AUTH + PathRoutes.CHILD_PATH_ADMIN_REGISTER).hasAuthority(AUTHORITY_SUPER_ADMIN)
+                        .antMatchers(PathRoutes.PATH_ORDERS).hasAnyAuthority(AUTHORITY_SUPER_ADMIN, AUTHORITY_ADMIN, AUTHORITY_USER)
+                        .antMatchers(PathRoutes.PATH_ORDER_LINES).hasAnyAuthority(AUTHORITY_SUPER_ADMIN, AUTHORITY_ADMIN, AUTHORITY_USER)
+                        .antMatchers(HttpMethod.POST,
+                                PathRoutes.PATH_GOODS_AVAILABILITIES + "/**",
+                                PathRoutes.PATH_GOODS + "/**",
+                                PathRoutes.PATH_GOODS_TYPES + "/**",
+                                PathRoutes.PATH_SHOPS + "/**")
+                            .hasAnyAuthority(AUTHORITY_SUPER_ADMIN, AUTHORITY_ADMIN)
+                        .antMatchers(HttpMethod.PATCH,
+                                PathRoutes.PATH_GOODS_AVAILABILITIES + "/**",
+                                PathRoutes.PATH_GOODS + "/**",
+                                PathRoutes.PATH_GOODS_TYPES + "/**",
+                                PathRoutes.PATH_SHOPS + "/**")
+                            .hasAnyAuthority(AUTHORITY_SUPER_ADMIN, AUTHORITY_ADMIN)
+                        .antMatchers(HttpMethod.DELETE,
+                                PathRoutes.PATH_GOODS_AVAILABILITIES + "/**",
+                                PathRoutes.PATH_GOODS + "/**",
+                                PathRoutes.PATH_GOODS_TYPES + "/**",
+                                PathRoutes.PATH_SHOPS + "/**")
+                            .hasAnyAuthority(AUTHORITY_SUPER_ADMIN, AUTHORITY_ADMIN)
                     .anyRequest().permitAll()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
