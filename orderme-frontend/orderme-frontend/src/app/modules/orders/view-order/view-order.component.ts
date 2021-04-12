@@ -64,7 +64,8 @@ export class ViewOrderComponent implements OnInit, OnDestroy {
             this.isLoading = false;
             this.isCurrentUserIsAdminAndProcessing =
               this.currentOrder.processingBy &&
-              (this.authenticationService.currentUserValue.userRole === UserRole.ADMIN)
+              ((this.authenticationService.currentUserValue.userRole === UserRole.ADMIN) ||
+                (this.authenticationService.currentUserValue.userRole === UserRole.SUPER_ADMIN ))
               && (this.currentOrder.processingBy.userId === this.authenticationService.currentUserValue.userId);
           }, error => {
             console.error(error);
