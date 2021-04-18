@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl_v1: `http://localhost:8080/api/v1/`,
+  apiUrl_v1: `/api/v1/`,
+    //`http://localhost:8080/api/v1/`,
   firebaseConfig: {
     apiKey: "AIzaSyBV2IaH7n7jN9xnFFFXixq7JvoKFA0HZ-c",
     authDomain: "ordermeimagestorage.firebaseapp.com",
