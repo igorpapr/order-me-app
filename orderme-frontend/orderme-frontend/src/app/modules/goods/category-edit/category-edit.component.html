@@ -5,13 +5,13 @@
 </div>
 
 <div *ngIf="!isLoading && !isEditModeEnabled" class="container">
-  <div class="row">
+  <div class="row mt-2">
     <div class="col">
-      <button (click)="startEditing()" class="btn btn-info">Edit</button>
+      <button (click)="startEditing()" class="btn btn-info mr-2">Edit</button>
       <button (click)="deleteCurrentGoodsType()" class="btn btn-danger">Delete</button>
     </div>
   </div>
-  <div class="row">
+  <div class="row mt-2">
     <div class="col">
       <div *ngIf="(!filePath) && currentGoodsType.imageLink" class="w-80">
         <img class="img-fluid" [src]="currentGoodsType.imageLink | getDownloadURL"  alt="Current photo"/>

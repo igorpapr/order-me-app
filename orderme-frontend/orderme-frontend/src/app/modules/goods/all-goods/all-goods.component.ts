@@ -28,7 +28,7 @@ export class AllGoodsComponent implements OnInit, OnDestroy {
   paginationObject: Page<Goods>;
 
   currentPageNumber: number = 1;
-  readonly pageSize: number = 9;
+  readonly pageSize: number = 8;
 
   currentShop: Observable<Shop>;
   isAdministrator: boolean = false;
